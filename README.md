@@ -1,6 +1,6 @@
 # A collection of useful functions
 
-I put all my helper and useful functions inside this repo so it can be used readily in new projects and by other developers. I used tasty to do the testing on the functions. There may be better ways to write these functions but this is what I use in my projects. They are tested and they work well on-chain.
+A collection of useful functions are contained inside this repo so it can be used readily in new projects and by other developers. Tasty is used to do the testing. There may be better ways to write these functions but they are tested and they work well on-chain.
 
 To build out the project.
 
@@ -16,7 +16,7 @@ To run all the tests.
 cabal test
 ```
 
-Add this to the cabal.project file and update the tag to the current release.
+Add this to the cabal.project file and update the tag to the most current release.
 
 ```cabal
 source-repository-package
@@ -26,7 +26,7 @@ source-repository-package
   subdir: useful-funcs
 ```
 
-Then add in useful-funcs into your cabal file for a build dependency.
+Then add in useful-funcs into your .cabal file for a build dependency.
 
 ```cabal
   ...
