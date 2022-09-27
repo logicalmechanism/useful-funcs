@@ -12,7 +12,7 @@ import Plutus.V2.Ledger.Contexts   as V2
 import Plutus.V1.Ledger.Value      as Value
 import Plutus.V1.Ledger.Time       as Time
 import Plutus.V1.Ledger.Interval   as Interval
-import PlutusTx.Builtins.Internal
+import PlutusTx.Builtins.Internal (mkI)
 
 --------------------------------------------------------------------------------
 

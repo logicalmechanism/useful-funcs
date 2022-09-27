@@ -25,6 +25,16 @@
 {-# OPTIONS_GHC -fobject-code                 #-}
 {-# OPTIONS_GHC -fno-specialise               #-}
 {-# OPTIONS_GHC -fexpose-all-unfoldings       #-}
+{-|
+Module      : UsefulFuncs
+Description : A Collection of Useful Functions
+Copyright   : (c) Ancient Kraken, 2022
+License     : GPL-3
+Maintainer  : logical.mechanism@protonmail.com
+Stability   : stable
+
+A collection of tested on and off chain plutus functions.
+-}
 module UsefulFuncs
   ( integerAsByteString
   , byteStringAsIntegerList
@@ -61,9 +71,15 @@ import Plutus.V1.Ledger.Value      as Value
 import Plutus.V1.Ledger.Time       as Time
 import Plutus.V1.Ledger.Interval   as Interval
 -------------------------------------------------------------------------
--- | add pairs of elements together from two lists into a new list
+-- | Add pairs of elements together from two lists into a new list.
+-- The length of the list will be the shortest input list. Empty list inputs
+-- return empty list outputs.
 --
--- Testing: Test.Groups.List
+-- @
+-- addTwoList [1,2,3] [3,2,1] == [4,4,4]
+-- @
+-- 
+-- Test.Groups.List
 -------------------------------------------------------------------------
 addTwoLists :: [Integer] -> [Integer] -> [Integer]
 addTwoLists a b = combineLists a b []
@@ -73,9 +89,16 @@ addTwoLists a b = combineLists a b []
     combineLists []      _     out = out
     combineLists (x:xs) (y:ys) out = combineLists xs ys (out <> [x+y])
 -------------------------------------------------------------------------
--- | subtracts pairs of elements together from two lists into a new list
+-- | Subtracts pairs of elements together from two lists into a new list.
+-- The length of the list will be the shortest input list. 
 --
--- Testing: Test.Groups.List
+-- Only positive integers.
+--
+-- @
+-- subTwoLists [3,2,1] [1,2,3] == [2,0,0]
+-- @
+--
+-- Test.Groups.List
 -------------------------------------------------------------------------
 subTwoLists :: [Integer] -> [Integer] -> [Integer]
 subTwoLists a b = combineLists a b []
@@ -88,7 +111,13 @@ subTwoLists a b = combineLists a b []
         then combineLists xs ys (out <> [0])     -- no negatives
         else combineLists xs ys (out <> [x - y])
 -------------------------------------------------------------------------
--- | multiply pairs of elements together from two lists into a new list
+-- | Multiply pairs of elements together from two lists into a new list.
+-- The length of the list will be the shortest input list. Empty list inputs
+-- return empty list outputs.
+--
+-- @
+-- multiplyTwoList [1,2,3] [1,2,3] == [1,4,9]
+-- @
 --
 -- Testing: Test.Groups.List
 -------------------------------------------------------------------------
