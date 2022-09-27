@@ -2,7 +2,7 @@ cabal-version: 3.0
 
 name:                   useful-funcs
 version:                0
-description:            A plutus script for retreiving funds.
+description:            A collection of useful functions.
 author:                 The Ancient Kraken
 maintainer:             logical.mechanism@protonmail.com
 license:                AGPL-3.0-only

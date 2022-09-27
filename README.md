@@ -2,6 +2,8 @@
 
 A collection of useful functions are contained inside this repo so it can be used readily in new projects and by other developers. Tasty is used to do the testing. There may be better ways to write these functions but they are tested and they work well on-chain.
 
+## Build and Test
+
 To build out the project.
 
 ```hs
@@ -15,6 +17,8 @@ To run all the tests.
 ```hs
 cabal test
 ```
+
+## Using the Repo
 
 Add this to the cabal.project file and update the tag to the most current release.
 
@@ -42,3 +46,20 @@ import UsefulFuncs
 ```
 
 Now the contract has access to all the useful functions inside the repo.
+
+## Documentation
+
+To view the haddock documentation
+
+```bash
+cd useful-funcs
+cabal haddock --ghc --cabal-file=useful-funcs.cabal >> output
+firefox $(tail -n 1 output)
+```
+
+or view the document html file from the precompile docs folder.
+
+```bash
+cd docs
+firefox index.html
+```

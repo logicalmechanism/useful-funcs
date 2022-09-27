@@ -59,17 +59,9 @@ import Plutus.V2.Ledger.Contexts   as V2
 import Plutus.V1.Ledger.Value      as Value
 import Plutus.V1.Ledger.Time       as Time
 import Plutus.V1.Ledger.Interval   as Interval
-{- |
-  Author   : The Ancient Kraken
-  Copyright: 2022
-  
-  cabal-install version 3.6.2.0
-  compiled using version 3.6.2.0 of the Cabal library
-
-  The Glorious Glasgow Haskell Compilation System, version 8.10.7
--}
 -------------------------------------------------------------------------
 -- | add pairs of elements together from two lists into a new list
+--
 -- Testing: Test.Groups.List
 -------------------------------------------------------------------------
 addTwoLists :: [Integer] -> [Integer] -> [Integer]
@@ -81,6 +73,7 @@ addTwoLists a b = combineLists a b []
     combineLists (x:xs) (y:ys) out = combineLists xs ys (out <> [x+y])
 -------------------------------------------------------------------------
 -- | subtracts pairs of elements together from two lists into a new list
+--
 -- Testing: Test.Groups.List
 -------------------------------------------------------------------------
 subTwoLists :: [Integer] -> [Integer] -> [Integer]
@@ -95,6 +88,7 @@ subTwoLists a b = combineLists a b []
         else combineLists xs ys (out <> [x - y])
 -------------------------------------------------------------------------
 -- | multiply pairs of elements together from two lists into a new list
+--
 -- Testing: Test.Groups.List
 -------------------------------------------------------------------------
 multiplyTwoLists :: [Integer] -> [Integer] -> [Integer]
@@ -106,6 +100,7 @@ multiplyTwoLists a b = combineLists a b []
     combineLists (x:xs) (y:ys) out = combineLists xs ys (out <> [x * y])
 -------------------------------------------------------------------------
 -- | multiply each element of a list by some scaler into a new list
+--
 -- Testing: Test.Groups.List
 -------------------------------------------------------------------------
 multiplyAList :: [Integer] -> Integer -> [Integer]
@@ -116,6 +111,7 @@ multiplyAList a scale'' = combineLists a scale'' []
     combineLists (x:xs) scale' out = combineLists xs scale' (out <> [x * scale'])
 -------------------------------------------------------------------------
 -- | divide pairs of elements together from two lists into a new list
+--
 -- Testing: Test.Groups.List
 -------------------------------------------------------------------------
 divideTwoLists :: [Integer] -> [Integer] -> [Integer]
@@ -130,6 +126,7 @@ divideTwoLists a b = combineLists a b []
         else combineLists xs ys (out <> [divide x y]) -- integer division
 -------------------------------------------------------------------------
 -- | divide each element of a list by some scaler into a new list
+--
 -- Testing: Test.Groups.List
 -------------------------------------------------------------------------
 divideAList :: [Integer] -> Integer -> [Integer]
@@ -143,6 +140,7 @@ divideAList a scale'' = combineLists a scale'' []
         else combineLists xs scale' (out <> [divide x scale']) -- integer division
 -------------------------------------------------------------------------
 -- | Check if the policy id is in the list of policy id from some value
+--
 -- Testing: Test.Groups.Value
 -------------------------------------------------------------------------
 checkForCurrencySymbol :: [V2.CurrencySymbol] -> V2.CurrencySymbol -> Bool
@@ -153,6 +151,7 @@ checkForCurrencySymbol (x:xs) cs =
     else checkForCurrencySymbol xs cs
 -------------------------------------------------------------------------
 -- | Count how many redeemers are being used inside the tx.
+--
 -- Testing: Test.Groups.Value
 -------------------------------------------------------------------------
 isNRedeemers :: [V2.Redeemer] -> Integer
@@ -163,24 +162,28 @@ isNRedeemers redeemers = isNRedeemers' redeemers 0
     isNRedeemers' (_:xs) c = isNRedeemers' xs (c + 1)
 -------------------------------------------------------------------------
 -- | Check if the validity range is inside the time interval
+--
 -- Testing: Test.Groups.Time
 -------------------------------------------------------------------------
 isTxInsideInterval :: V2.Interval V2.POSIXTime -> V2.POSIXTimeRange -> Bool
 isTxInsideInterval timeRange txValidityRange = Interval.contains timeRange txValidityRange
 -------------------------------------------------------------------------
 -- | Check if the validity range of the tx is outside of the time interval
+--
 -- Testing: Test.Groups.Time
 -------------------------------------------------------------------------
 isTxOutsideInterval :: V2.Interval V2.POSIXTime -> V2.POSIXTimeRange -> Bool
 isTxOutsideInterval timeRange txValidityRange = not $ Interval.overlaps timeRange txValidityRange
 -------------------------------------------------------------------------------
 -- | Pick the locking interval, assume negative inf to endingTime.
+--
 -- Testing: Test.Groups.Time
 -------------------------------------------------------------------------------
 lockUntilTimeInterval :: Integer -> V2.Interval V2.POSIXTime
 lockUntilTimeInterval endingTime = Interval.to (integerToPOSIX endingTime)
 -------------------------------------------------------------------------
 -- | The time interval for the tx to be locked.
+--
 -- Testing: Test.Groups.Time
 -------------------------------------------------------------------------
 lockBetweenTimeInterval :: Integer -> Integer -> V2.Interval V2.POSIXTime
@@ -193,6 +196,7 @@ integerToPOSIX :: Integer -> V2.POSIXTime
 integerToPOSIX x = Time.fromMilliSeconds $ Time.DiffMilliSeconds x
 -------------------------------------------------------------------------------
 -- | Simple Multisig, using the info check all the pkh sigs
+--
 -- Testing: Test.Groups.Address
 -------------------------------------------------------------------------------
 checkValidMultisig :: V2.TxInfo -> [V2.PubKeyHash] -> Integer -> Bool
@@ -206,6 +210,7 @@ checkValidMultisig txInfo pkhs thres = loopSigs pkhs 0
         else loopSigs xs counter       -- toss out the bad
 -------------------------------------------------------------------------------
 -- | Search each TxOut for an addr and value.
+--
 -- Testing: Test.Groups.Address
 -------------------------------------------------------------------------------
 isAddrGettingPaidExactly :: [V2.TxOut] -> V2.Address -> V2.Value -> Bool
@@ -221,6 +226,7 @@ isAddrGettingPaidExactly (x:xs) addr val
     checkVal = V2.txOutValue x == val -- must be exact
 -------------------------------------------------------------------------------
 -- | Search each TxOut for an addr and value.
+--
 -- Testing: Test.Groups.Address
 -------------------------------------------------------------------------------
 isAddrHoldingToken :: [V2.TxOut] -> V2.Address -> V2.CurrencySymbol -> V2.TokenName -> Integer -> Bool
@@ -236,6 +242,7 @@ isAddrHoldingToken (x:xs) addr pid tkn val
     checkVal = Value.valueOf (V2.txOutValue x) pid tkn == val -- must be exact
 -------------------------------------------------------------------------------
 -- | Count the number of inputs that have datums of any kind.
+--
 -- Testing: Test.Groups.Address
 -------------------------------------------------------------------------------
 isNInputs :: [V2.TxInInfo] -> Integer -> Bool
@@ -250,6 +257,7 @@ isNInputs utxos number = loopInputs utxos 0
         ( V2.OutputDatum     _ ) -> loopInputs xs ( counter + 1 ) -- inline
 -------------------------------------------------------------------------------
 -- | Count the number of outputs that have datums of any kind.
+--
 -- Testing: Test.Groups.Address
 -------------------------------------------------------------------------------
 isNOutputs :: [V2.TxOut] -> Integer -> Bool
@@ -264,6 +272,7 @@ isNOutputs utxos number = loopInputs utxos 0
         ( V2.OutputDatum     _ ) -> loopInputs xs ( counter + 1 ) -- inline
 -------------------------------------------------------------------------
 -- | Create a proper Address type.
+--
 -- Testing: Test.Groups.Address
 -------------------------------------------------------------------------
 createAddress :: V2.PubKeyHash -> V2.PubKeyHash -> V2.Address
@@ -319,6 +328,7 @@ stringToIntegerMapping ch
   | otherwise = 0
 -------------------------------------------------------------------------------
 -- | "Converts a hex encoded string into a list of integers for hardcoding."
+--
 -- Testing: Test.Groups.Helpers
 -------------------------------------------------------------------------------
 byteStringAsIntegerList :: V2.BuiltinByteString -> [Integer]
@@ -352,6 +362,7 @@ byteStringAsIntegerList str' = createList str' 0 []
         else  x * pow x ( n - 1 )
 -------------------------------------------------------------------------------
 -- | Convert an integer into a string.
+--
 -- Testing: Test.Groups.Helpers
 -------------------------------------------------------------------------------
 integerAsByteString :: Integer -> V2.BuiltinByteString
@@ -365,6 +376,7 @@ integerAsByteString num = if num == 0 then "0" else convertToString base10 ""
     convertToString (x:xs) str = convertToString xs (str <> integerToStringMapping x)
 -------------------------------------------------------------------------------
 -- | Write an integer in base Q and return a list of integers.
+--
 -- Testing: Test.Groups.Helpers
 -------------------------------------------------------------------------------
 baseQ :: Integer -> Integer -> [Integer]
@@ -377,12 +389,14 @@ baseQ number base = if base == 0 then [] else baseQ' number base []
         else baseQ' (divide number' base') base' (modulo number' base' : list)
 -------------------------------------------------------------------------------
 -- | Compute the sha3 256 hash of some byte string
+--
 -- Testing: Test.Groups.Helpers
 -------------------------------------------------------------------------------
 hash :: V2.BuiltinByteString -> V2.BuiltinByteString
 hash string = sha3_256 string
 -------------------------------------------------------------------------
 -- | Replicates a list, l, n times.hash 
+--
 -- Testing: Test.Groups.Helpers
 -------------------------------------------------------------------------
 replicate :: [Integer] -> Integer -> [Integer]
@@ -395,6 +409,7 @@ replicate l n' = replicate' n' l []
         else replicate' (n-1) a (o <> a)
 -------------------------------------------------------------------------
 -- | The log of x in base b in plutus
+--
 -- Testing: Test.Groups.Helpers
 -------------------------------------------------------------------------
 logOfXInBaseB :: Integer -> Integer -> Integer
@@ -404,6 +419,7 @@ logOfXInBaseB x b = if b <= 0 then 0 else if x == b then 1 else
     else 1 + logOfXInBaseB (divide x b) b
 -------------------------------------------------------------------------
 -- | Creates a proper BuiltinByteString type.
+--
 -- Testing: Test.Groups.Helpers
 -------------------------------------------------------------------------
 createBuiltinByteString :: [Integer] -> V2.BuiltinByteString
@@ -414,6 +430,7 @@ createBuiltinByteString intList = flattenBuiltinByteString [ consByteString x em
     flattenBuiltinByteString (x:xs) = appendByteString x (flattenBuiltinByteString xs)
 -------------------------------------------------------------------------
 -- | Take in a bytestring and convert it to a number by the product of hex number
+--
 -- Testing: Test.Groups.Helpers
 -------------------------------------------------------------------------
 convertByteStringToInteger :: BuiltinByteString -> Integer
