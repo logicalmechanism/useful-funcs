@@ -7,6 +7,7 @@ import Groups.Helpers as Helpers
 import Groups.Time    as Time
 import Groups.Address as Addr
 import Groups.Value   as Value
+import Groups.List    as List
 --------------------------------------------------------------------------------
 main :: IO ()
 main =
@@ -17,4 +18,5 @@ main =
       , testGroup "Time"    Time.tests
       , testGroup "Address" Addr.tests
       , testGroup "Value"   Value.tests
+      , testGroup "List"    List.tests
       ]

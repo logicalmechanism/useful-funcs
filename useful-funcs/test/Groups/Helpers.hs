@@ -22,6 +22,7 @@ import UsefulFuncs ( replicate
                    , createBuiltinByteString
                    , integerAsByteString
                    , baseQ
+                   , convertByteStringToInteger
                    )
 --------------------------------------------------------------------------------
 
@@ -65,6 +66,16 @@ prop_BaseQTest = do
   ; all (==(True :: Bool)) [a,b,c,d]
   }
 
+-- convert a string into a number via product
+prop_ConvertByteStringToIntegerTest = do
+  { let a = (convertByteStringToInteger $ hash "")     == 2739796737785856
+  ; let b = convertByteStringToInteger ""              == 0
+  ; let c = (convertByteStringToInteger $ hash "test") == 4622965172100
+  ; let d = convertByteStringToInteger "acab"          == 0
+  ; let e = convertByteStringToInteger "acabef12"      == 49945313880000
+  ; all (==(True :: Bool)) [a,b,c,d,e]
+  }
+
 
 tests :: [TestTree]
 tests = [ testProperty "Replicate List N Times"  prop_ReplicateTest
@@ -72,4 +83,5 @@ tests = [ testProperty "Replicate List N Times"  prop_ReplicateTest
         , testProperty "Manipulate ByteStrings"  prop_ByteStringManipulationTest
         , testProperty "Write Integer As String" prop_IntegerToStringTest
         , testProperty "Write N In Base Q"       prop_BaseQTest
+        , testProperty "Convert String To Int"   prop_ConvertByteStringToIntegerTest
         ]

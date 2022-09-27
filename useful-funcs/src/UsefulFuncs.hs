@@ -45,6 +45,13 @@ module UsefulFuncs
   , replicate
   , checkValidMultisig
   , baseQ
+  , addTwoLists
+  , subTwoLists
+  , multiplyTwoLists
+  , multiplyAList
+  , convertByteStringToInteger
+  , divideTwoLists
+  , divideAList
   ) where
 import PlutusTx.Prelude
 import Plutus.V2.Ledger.Api        as V2
@@ -61,6 +68,79 @@ import Plutus.V1.Ledger.Interval   as Interval
 
   The Glorious Glasgow Haskell Compilation System, version 8.10.7
 -}
+-------------------------------------------------------------------------
+-- | add pairs of elements together from two lists into a new list
+-- Testing: Test.Groups.List
+-------------------------------------------------------------------------
+addTwoLists :: [Integer] -> [Integer] -> [Integer]
+addTwoLists a b = combineLists a b []
+  where
+    combineLists :: [Integer] -> [Integer] -> [Integer] -> [Integer]
+    combineLists _      []     out = out
+    combineLists []      _     out = out
+    combineLists (x:xs) (y:ys) out = combineLists xs ys (out <> [x+y])
+-------------------------------------------------------------------------
+-- | subtracts pairs of elements together from two lists into a new list
+-- Testing: Test.Groups.List
+-------------------------------------------------------------------------
+subTwoLists :: [Integer] -> [Integer] -> [Integer]
+subTwoLists a b = combineLists a b []
+  where
+    combineLists :: [Integer] -> [Integer] -> [Integer] -> [Integer]
+    combineLists _      []     out = out
+    combineLists []      _     out = out
+    combineLists (x:xs) (y:ys) out = 
+      if x - y < 0 
+        then combineLists xs ys (out <> [0])     -- no negatives
+        else combineLists xs ys (out <> [x - y])
+-------------------------------------------------------------------------
+-- | multiply pairs of elements together from two lists into a new list
+-- Testing: Test.Groups.List
+-------------------------------------------------------------------------
+multiplyTwoLists :: [Integer] -> [Integer] -> [Integer]
+multiplyTwoLists a b = combineLists a b []
+  where
+    combineLists :: [Integer] -> [Integer] -> [Integer] -> [Integer]
+    combineLists _      []     out = out
+    combineLists []      _     out = out
+    combineLists (x:xs) (y:ys) out = combineLists xs ys (out <> [x * y])
+-------------------------------------------------------------------------
+-- | multiply each element of a list by some scaler into a new list
+-- Testing: Test.Groups.List
+-------------------------------------------------------------------------
+multiplyAList :: [Integer] -> Integer -> [Integer]
+multiplyAList a scale'' = combineLists a scale'' []
+  where
+    combineLists :: [Integer] -> Integer -> [Integer] -> [Integer]
+    combineLists []     _     out = out
+    combineLists (x:xs) scale' out = combineLists xs scale' (out <> [x * scale'])
+-------------------------------------------------------------------------
+-- | divide pairs of elements together from two lists into a new list
+-- Testing: Test.Groups.List
+-------------------------------------------------------------------------
+divideTwoLists :: [Integer] -> [Integer] -> [Integer]
+divideTwoLists a b = combineLists a b []
+  where
+    combineLists :: [Integer] -> [Integer] -> [Integer] -> [Integer]
+    combineLists _      []     out = out
+    combineLists []      _     out = out
+    combineLists (x:xs) (y:ys) out =
+      if y == 0 
+        then combineLists xs ys (out <> [x])          -- keep the number
+        else combineLists xs ys (out <> [divide x y]) -- integer division
+-------------------------------------------------------------------------
+-- | divide each element of a list by some scaler into a new list
+-- Testing: Test.Groups.List
+-------------------------------------------------------------------------
+divideAList :: [Integer] -> Integer -> [Integer]
+divideAList a scale'' = combineLists a scale'' []
+  where
+    combineLists :: [Integer] -> Integer -> [Integer] -> [Integer]
+    combineLists []     _     out = out
+    combineLists (x:xs) scale' out = 
+      if scale' == 0 
+        then combineLists xs scale' (out <> [x])               -- keep the number
+        else combineLists xs scale' (out <> [divide x scale']) -- integer division
 -------------------------------------------------------------------------
 -- | Check if the policy id is in the list of policy id from some value
 -- Testing: Test.Groups.Value
@@ -332,3 +412,25 @@ createBuiltinByteString intList = flattenBuiltinByteString [ consByteString x em
     flattenBuiltinByteString :: [V2.BuiltinByteString] -> V2.BuiltinByteString
     flattenBuiltinByteString []     = emptyByteString 
     flattenBuiltinByteString (x:xs) = appendByteString x (flattenBuiltinByteString xs)
+-------------------------------------------------------------------------
+-- | Take in a bytestring and convert it to a number by the product of hex number
+-- Testing: Test.Groups.Helpers
+-------------------------------------------------------------------------
+convertByteStringToInteger :: BuiltinByteString -> Integer
+convertByteStringToInteger hexString = 
+  if hexString == emptyByteString
+    then 0
+    else 
+      if lengthOfByteString hexString >= fixedLength + 2
+        then hexStringToInteger hexString fixedLength 1 -- force length
+        else 0
+  where
+    -- this will restrict to numbers less than 2^64 - 1
+    fixedLength :: Integer
+    fixedLength = 6
+
+    -- add 1 to each number to avoid multiplying by zero
+    hexStringToInteger :: BuiltinByteString -> Integer -> Integer -> Integer
+    hexStringToInteger hex_string counter value'
+      | counter > 0 = hexStringToInteger hex_string (counter - 1) (value' * (indexByteString hex_string counter + 1))
+      | otherwise = value' * (indexByteString hex_string 0 + 1)
