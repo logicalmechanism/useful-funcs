@@ -49,17 +49,13 @@ Now the contract has access to all the useful functions inside the repo.
 
 ## Documentation
 
-To view the haddock documentation
+To compile and view the haddock documentation run from the parent directory.
 
 ```bash
 cd useful-funcs
 cabal haddock --ghc --cabal-file=useful-funcs.cabal >> output
-firefox $(tail -n 1 output)
-```
-
-or view the document html file from the precompile docs folder.
-
-```bash
-cd docs
+docPath=$(tail -n 1 output)
+cp -r ${docPath%index.html} ../docs
+cd ../docs
 firefox index.html
 ```
