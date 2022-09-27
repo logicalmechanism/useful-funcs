@@ -23,6 +23,7 @@ import UsefulFuncs ( replicate
                    , integerAsByteString
                    , baseQ
                    , convertByteStringToInteger
+                   , pow
                    )
 --------------------------------------------------------------------------------
 
@@ -76,6 +77,14 @@ prop_ConvertByteStringToIntegerTest = do
   ; all (==(True :: Bool)) [a,b,c,d,e]
   }
 
+-- pow stuff
+prop_PowTest = do
+  { let a = pow 10 0 == 1
+  ; let b = pow 0  2 == 0
+  ; let c = pow 2  2 == 4
+  ; let d = pow 89 3 == 704969
+  ; all (==(True :: Bool)) [a,b,c,d]
+  }
 
 tests :: [TestTree]
 tests = [ testProperty "Replicate List N Times"  prop_ReplicateTest
@@ -84,4 +93,5 @@ tests = [ testProperty "Replicate List N Times"  prop_ReplicateTest
         , testProperty "Write Integer As String" prop_IntegerToStringTest
         , testProperty "Write N In Base Q"       prop_BaseQTest
         , testProperty "Convert String To Int"   prop_ConvertByteStringToIntegerTest
+        , testProperty "x To The Power Of n"     prop_PowTest
         ]

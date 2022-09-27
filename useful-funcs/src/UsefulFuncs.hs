@@ -40,6 +40,7 @@ module UsefulFuncs
   , isTxOutsideInterval
   , isTxInsideInterval
   , hash
+  , pow
   , checkForCurrencySymbol
   , logOfXInBaseB
   , replicate
@@ -354,12 +355,16 @@ byteStringAsIntegerList str' = createList str' 0 []
 
         val' :: Integer
         val' = stringToIntegerMapping first'
-    
-    pow:: Integer -> Integer -> Integer
-    pow x n = if n == 0 then 1 else if n == 1 then x else
-      if even n
-        then pow x ( divide n 2 ) * pow x ( divide n 2 )
-        else  x * pow x ( n - 1 )
+-------------------------------------------------------------------------------
+-- | Calculates x to the power of n
+--
+-- Testing: Test.Groups.Helpers
+------------------------------------------------------------------------------- 
+pow:: Integer -> Integer -> Integer
+pow x n = if n == 0 then 1 else if n == 1 then x else
+  if even n
+    then pow x ( divide n 2 ) * pow x ( divide n 2 )
+    else  x * pow x ( n - 1 )
 -------------------------------------------------------------------------------
 -- | Convert an integer into a string.
 --
