@@ -1,0 +1,4 @@
+cradle:
+  cabal:
+    - path: "./useful-funcs/src"
+      component: "useful-funcs:lib:useful-funcs"
