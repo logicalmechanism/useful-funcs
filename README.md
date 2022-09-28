@@ -4,9 +4,10 @@ A collection of useful functions are contained inside this repo so it can be use
 
 ## Build and Test
 
-To build out the project.
+To build out the project from the parent directory.
 
-```hs
+```bash
+cd useful-funcs
 cabal clean
 cabal update
 cabal build -w ghc-8.10.7
@@ -68,3 +69,5 @@ cd useful-funcs
 cabal haddock --ghc --cabal-file=useful-funcs.cabal >> output
 firefox $(tail -n 1 output)
 ```
+
+[Documentation Link](https://htmlpreview.github.io/?https://raw.githubusercontent.com/logicalmechanism/useful-funcs/main/docs/UsefulFuncs.html)
