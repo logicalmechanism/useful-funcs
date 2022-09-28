@@ -212,7 +212,7 @@ checkForCurrencySymbol (x:xs) cs =
 -- txInfoRedeemers :: Map ScriptPurpose Redeemer
 --
 -- redeemers :: [Redeemer]
--- redeemers = toList $ txInfoRedeemers $ scriptContextTxInfo  scriptContext
+-- redeemers = toList $ txInfoRedeemers $ scriptContextTxInfo scriptContext
 -- @
 --
 -- Testing: Test.Groups.Value
@@ -224,41 +224,75 @@ isNRedeemers redeemers = isNRedeemers' redeemers 0
     isNRedeemers' []     c = c
     isNRedeemers' (_:xs) c = isNRedeemers' xs (c + 1)
 -------------------------------------------------------------------------
--- | Check if the validity range is inside the time interval
+-- | Check if the validity range is inside a time interval. The validity 
+-- range must be completely contained within the time range.
+-- That is, @a `contains` b@ if for every entry @s@, if @member s b@ then
+-- @member s a@. This is designed to be used with the script context inside 
+-- a validation script.
+--
+-- @
+-- txValidityRange :: POSIXTimeRange
+-- txValidityRange = txInfoValidRange $ scriptContextTxInfo scriptContext
+-- @
 --
 -- Testing: Test.Groups.Time
 -------------------------------------------------------------------------
 isTxInsideInterval :: V2.Interval V2.POSIXTime -> V2.POSIXTimeRange -> Bool
 isTxInsideInterval timeRange txValidityRange = Interval.contains timeRange txValidityRange
 -------------------------------------------------------------------------
--- | Check if the validity range of the tx is outside of the time interval
+-- | Check if the validity range of the tx is outside of the time interval,
+-- that is, whether there is a value that is not a member of both intervals.
+-- This does not allow for validity ranges to be on the boundary of the time range.
+-- This is designed to be used with the script context inside a validation script.
+--
+-- @
+-- txValidityRange :: POSIXTimeRange
+-- txValidityRange = txInfoValidRange $ scriptContextTxInfo scriptContext
+-- @
 --
 -- Testing: Test.Groups.Time
 -------------------------------------------------------------------------
 isTxOutsideInterval :: V2.Interval V2.POSIXTime -> V2.POSIXTimeRange -> Bool
 isTxOutsideInterval timeRange txValidityRange = not $ Interval.overlaps timeRange txValidityRange
 -------------------------------------------------------------------------------
--- | Pick the locking interval, assume negative inf to endingTime.
+-- | Pick the locking interval, assume negative inf to endingTime. This should be
+-- used to lock some utxo for all time up until some point in the future.
+-- This is designed to be used with the script context inside a validation script.
+--
+-- >>> lockUntilTimeInterval 42
+-- Interval {ivFrom = LowerBound NegInf True, ivTo = UpperBound (Finite (POSIXTime {getPOSIXTime = 42})) True}
 --
 -- Testing: Test.Groups.Time
 -------------------------------------------------------------------------------
 lockUntilTimeInterval :: Integer -> V2.Interval V2.POSIXTime
 lockUntilTimeInterval endingTime = Interval.to (integerToPOSIX endingTime)
 -------------------------------------------------------------------------
--- | The time interval for the tx to be locked.
+-- | The time interval for the tx to be locked. This is designed to create
+-- a time interval between point a and point b.
+--
+-- >>> lockBetweenTimeInterval 17 19
+-- Interval {ivFrom = LowerBound (Finite (POSIXTime {getPOSIXTime = 17})) True, ivTo = UpperBound (Finite (POSIXTime {getPOSIXTime = 19})) True}
 --
 -- Testing: Test.Groups.Time
 -------------------------------------------------------------------------
 lockBetweenTimeInterval :: Integer -> Integer -> V2.Interval V2.POSIXTime
 lockBetweenTimeInterval startingTime endingTime = Interval.interval (integerToPOSIX startingTime) (integerToPOSIX endingTime)
 -------------------------------------------------------------------------
--- | Create a proper time unit from an integer
+-- | Create a proper time unit from an integer.
 -- Not Exposed
 -------------------------------------------------------------------------
 integerToPOSIX :: Integer -> V2.POSIXTime
 integerToPOSIX x = Time.fromMilliSeconds $ Time.DiffMilliSeconds x
 -------------------------------------------------------------------------------
--- | Simple Multisig, using the info check all the pkh sigs
+-- | A simple multisig validation. Using the script context information, validate
+-- every public key hash signature. If the public key hash is a tx signer then
+-- increment the counter. At the end check if the number of signers is greater
+-- than or equal to some threshold integer. This assumes the list of public key hashes
+-- are known at the time of validation.
+--
+-- @
+-- checkValidMultisig scriptContextInfo listOfPkhs threshold
+-- @
 --
 -- Testing: Test.Groups.Address
 -------------------------------------------------------------------------------
@@ -272,7 +306,9 @@ checkValidMultisig txInfo pkhs thres = loopSigs pkhs 0
         then loopSigs xs (counter + 1) -- just add up the good sigs
         else loopSigs xs counter       -- toss out the bad
 -------------------------------------------------------------------------------
--- | Search each TxOut for an addr and value.
+-- | Search a list of TxOut for TxOut with a specific address and value. This
+-- is a simple way to check if there exist an output utxo that has exactly
+-- some value and is being sent to a known address.
 --
 -- Testing: Test.Groups.Address
 -------------------------------------------------------------------------------
@@ -288,7 +324,10 @@ isAddrGettingPaidExactly (x:xs) addr val
     checkVal :: Bool
     checkVal = V2.txOutValue x == val -- must be exact
 -------------------------------------------------------------------------------
--- | Search each TxOut for an addr and value.
+-- | Search a list of TxOut for a TxOut with a specific address that is hodling
+-- an exact amount of of a singular token. This is a great function when only
+-- a token is known but not the minimum amount of ada that is travelling
+-- with that token during a transaction.
 --
 -- Testing: Test.Groups.Address
 -------------------------------------------------------------------------------
@@ -304,14 +343,17 @@ isAddrHoldingToken (x:xs) addr pid tkn val
     checkVal :: Bool
     checkVal = Value.valueOf (V2.txOutValue x) pid tkn == val -- must be exact
 -------------------------------------------------------------------------------
--- | Count the number of inputs that have datums of any kind.
+-- | Count the number of inputs that have datums of any kind. A script input is
+-- spendable if and only if it has some kind of datum, either embedded or inline.
+-- Thus limiting the number of script inputs is simply limiting the number of
+-- inputs that have some type of datum.
 --
 -- Testing: Test.Groups.Address
 -------------------------------------------------------------------------------
 isNInputs :: [V2.TxInInfo] -> Integer -> Bool
 isNInputs utxos number = loopInputs utxos 0
   where
-    loopInputs :: [V2.TxInInfo] -> Integer  -> Bool
+    loopInputs :: [V2.TxInInfo] -> Integer -> Bool
     loopInputs []     counter = counter == number
     loopInputs (x:xs) counter = 
       case V2.txOutDatum $ V2.txInInfoResolved x of
@@ -319,7 +361,9 @@ isNInputs utxos number = loopInputs utxos 0
         ( V2.OutputDatumHash _ ) -> loopInputs xs ( counter + 1 ) -- embedded
         ( V2.OutputDatum     _ ) -> loopInputs xs ( counter + 1 ) -- inline
 -------------------------------------------------------------------------------
--- | Count the number of outputs that have datums of any kind.
+-- | Count the number of outputs that have datums of any kind. This is great at
+-- limiting the number of outputs in a transaction that can have datums. An example
+-- is looking an outputs coming back to the script.
 --
 -- Testing: Test.Groups.Address
 -------------------------------------------------------------------------------
@@ -334,7 +378,17 @@ isNOutputs utxos number = loopInputs utxos 0
         ( V2.OutputDatumHash _ ) -> loopInputs xs ( counter + 1 ) -- embedded
         ( V2.OutputDatum     _ ) -> loopInputs xs ( counter + 1 ) -- inline
 -------------------------------------------------------------------------
--- | Create a proper Address type.
+-- | Create a proper Address type. A transaction can input only the public
+-- key hash of some wallet. This applies for payment and staking. Inside
+-- plutus an address is a combination of both pkhs and is not bech32. The
+-- function accounts for both types of addresses. Not to be used with 
+-- validator hashes.
+--
+-- >>> createAddress "acab" ""
+-- Address {addressCredential = PubKeyCredential acab, addressStakingCredential = Nothing}
+-- >>> createAddress "acab" "beef"
+-- Address {addressCredential = PubKeyCredential acab, addressStakingCredential = Just (StakingHash (PubKeyCredential beef))}
+--
 --
 -- Testing: Test.Groups.Address
 -------------------------------------------------------------------------
@@ -390,7 +444,15 @@ stringToIntegerMapping ch
   | ch == "f" = 15
   | otherwise = 0
 -------------------------------------------------------------------------------
--- | "Converts a hex encoded string into a list of integers for hardcoding."
+-- | Converts a hex encoded string into a list of integers for hardcoding. Without
+-- type validation there is not way to hardcode bytestring unless they are represented
+-- as a list of integers that can be mapped back into a bytestring on-chain.
+--
+-- 
+-- >>> pkh = "31ec74a9f86884e7a16f8fc30840f7f409c08b91e93d2be3a4377442"
+-- >>> byteStringAsIntegerList pkh
+-- [49,236,116,169,248,104,132,231,161,111,143,195,8,64,247,244,9,192,139,145,233,61,43,227,164,55,116,66]
+--
 --
 -- Testing: Test.Groups.Helpers
 -------------------------------------------------------------------------------
@@ -418,17 +480,28 @@ byteStringAsIntegerList str' = createList str' 0 []
         val' :: Integer
         val' = stringToIntegerMapping first'
 -------------------------------------------------------------------------------
--- | Calculates x to the power of n
+-- | Calculates x to the power of n using the exponentiation by squaring method.
+--
+-- >>> pow 513 3
+-- 135005697
 --
 -- Testing: Test.Groups.Helpers
 ------------------------------------------------------------------------------- 
-pow:: Integer -> Integer -> Integer
-pow x n = if n == 0 then 1 else if n == 1 then x else
-  if even n
-    then pow x ( divide n 2 ) * pow x ( divide n 2 )
-    else  x * pow x ( n - 1 )
+pow :: Integer -> Integer -> Integer
+pow x n = 
+    if n < 0 then 0 else
+      if n == 0 then 1 else -- assumes 0^0=1 and not 0
+      if even n 
+        then pow (x * x)  (divide n 2)
+        else x * pow (x * x) (divide (n - 1) 2)
 -------------------------------------------------------------------------------
--- | Convert an integer into a string.
+-- | Convert an integer into a string. This converts an integer into a list of
+-- integers representing the digit in base 10. This list is feed into a mapping
+-- that converts the integer into a bytestring. Great for creating incremental
+-- token names.
+--
+-- >>> "HelloWorld_" <> integerAsByteString 42
+-- "HelloWorld_42"
 --
 -- Testing: Test.Groups.Helpers
 -------------------------------------------------------------------------------
@@ -442,7 +515,11 @@ integerAsByteString num = if num == 0 then "0" else convertToString base10 ""
     convertToString []     str = str
     convertToString (x:xs) str = convertToString xs (str <> integerToStringMapping x)
 -------------------------------------------------------------------------------
--- | Write an integer in base Q and return a list of integers.
+-- | Write an integer n in base q and return it as a list of integers. This
+-- is the general algorithm for base conversion for any arbitrary base and number.
+--
+-- >>> baseQ 42 3
+-- [1,1,2,0]
 --
 -- Testing: Test.Groups.Helpers
 -------------------------------------------------------------------------------
@@ -455,14 +532,22 @@ baseQ number base = if base == 0 then [] else baseQ' number base []
         then list
         else baseQ' (divide number' base') base' (modulo number' base' : list)
 -------------------------------------------------------------------------------
--- | Compute the sha3 256 hash of some byte string
+-- | Compute the sha3_256 hash of some bytestring.
+--
+-- >>> hash "Hello, World!"
+-- "\SUB\241zfN?\168\228\EM\184\186\ENQ\194\161s\SYN\157\247ab\165\162\134\224\196\ENQ\180`\212x\247\239"
+-- >>> DatumHash $ hash "Hello, World!"
+-- 1af17a664e3fa8e419b8ba05c2a173169df76162a5a286e0c405b460d478f7ef
 --
 -- Testing: Test.Groups.Helpers
 -------------------------------------------------------------------------------
 hash :: V2.BuiltinByteString -> V2.BuiltinByteString
 hash string = sha3_256 string
 -------------------------------------------------------------------------
--- | Replicates a list, l, n times.hash 
+-- | Replicates a list l, n times. Simple replicate function.
+--
+-- >>> replicate [1,2,3] 2
+-- [1,2,3,1,2,3]
 --
 -- Testing: Test.Groups.Helpers
 -------------------------------------------------------------------------
@@ -475,7 +560,10 @@ replicate l n' = replicate' n' l []
         then o
         else replicate' (n-1) a (o <> a)
 -------------------------------------------------------------------------
--- | The log of x in base b in plutus
+-- | The log of x in base b for plutus. This is the integer division version.
+--
+-- >>> logOfXInBaseB 42 3
+-- 3
 --
 -- Testing: Test.Groups.Helpers
 -------------------------------------------------------------------------
