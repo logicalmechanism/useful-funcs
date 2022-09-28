@@ -573,7 +573,14 @@ logOfXInBaseB x b = if b <= 0 then 0 else if x == b then 1 else
     then 0
     else 1 + logOfXInBaseB (divide x b) b
 -------------------------------------------------------------------------
--- | Creates a proper BuiltinByteString type.
+-- | Creates a proper BuiltinByteString type from a list of integers. This
+-- is a hack solution to by pass the loss of type validation. It should be
+-- used with `byteStringAsIntegerList`. This allows a bytestring to be hard
+-- coded into a contract at compile time.
+--
+-- @
+-- createBuiltinByteString $ byteStringAsIntegerList pkh
+-- @
 --
 -- Testing: Test.Groups.Helpers
 -------------------------------------------------------------------------
@@ -584,7 +591,9 @@ createBuiltinByteString intList = flattenBuiltinByteString [ consByteString x em
     flattenBuiltinByteString []     = emptyByteString 
     flattenBuiltinByteString (x:xs) = appendByteString x (flattenBuiltinByteString xs)
 -------------------------------------------------------------------------
--- | Take in a bytestring and convert it to a number by the product of hex number
+-- | Take in a bytestring and converts it to a number via a product. Similar
+-- to creating an integer list but instead takes the product of all the values.
+-- The product is limited to numbers less than 2^64 - 1.
 --
 -- Testing: Test.Groups.Helpers
 -------------------------------------------------------------------------

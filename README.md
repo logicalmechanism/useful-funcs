@@ -61,7 +61,8 @@ cd ../docs
 firefox index.html
 ```
 
-Or build and view immediately from the parent directory..
+Or build and view immediately from the parent directory.
+
 ```bash
 cd useful-funcs
 cabal haddock --ghc --cabal-file=useful-funcs.cabal >> output
