@@ -75,9 +75,8 @@ import Plutus.V1.Ledger.Interval   as Interval
 -- The length of the list will be the shortest input list. Empty list inputs
 -- return empty list outputs.
 --
--- @
--- addTwoList [1,2,3] [3,2,1] == [4,4,4]
--- @
+-- >>> addTwoList [1,2,3] [3,2,1]
+-- [4,4,4]
 -- 
 -- Test.Groups.List
 -------------------------------------------------------------------------
@@ -94,9 +93,8 @@ addTwoLists a b = combineLists a b []
 --
 -- Only positive integers.
 --
--- @
--- subTwoLists [3,2,1] [1,2,3] == [2,0,0]
--- @
+-- >>> subTwoLists [3,2,1] [1,2,3]
+-- [2,0,0]
 --
 -- Test.Groups.List
 -------------------------------------------------------------------------
@@ -115,9 +113,8 @@ subTwoLists a b = combineLists a b []
 -- The length of the list will be the shortest input list. Empty list inputs
 -- return empty list outputs.
 --
--- @
--- multiplyTwoList [1,2,3] [1,2,3] == [1,4,9]
--- @
+-- >>> multiplyTwoList [1,2,3] [1,2,3]
+-- [1,4,9]
 --
 -- Testing: Test.Groups.List
 -------------------------------------------------------------------------
@@ -129,7 +126,12 @@ multiplyTwoLists a b = combineLists a b []
     combineLists []      _     out = out
     combineLists (x:xs) (y:ys) out = combineLists xs ys (out <> [x * y])
 -------------------------------------------------------------------------
--- | multiply each element of a list by some scaler into a new list
+-- | Multiply each element of a list by some scaler into a new list. The
+-- resulting list is the same length as the input list. Empty list inputs
+-- return empty list outputs.
+--
+-- >>> multiplyAList [1,2,3] 3
+-- [3,6,9]
 --
 -- Testing: Test.Groups.List
 -------------------------------------------------------------------------
@@ -140,7 +142,12 @@ multiplyAList a scale'' = combineLists a scale'' []
     combineLists []     _     out = out
     combineLists (x:xs) scale' out = combineLists xs scale' (out <> [x * scale'])
 -------------------------------------------------------------------------
--- | divide pairs of elements together from two lists into a new list
+-- | Divide pairs of elements together from two lists into a new list.
+-- The length of the list will be the shortest input list. Empty list inputs
+-- return empty list outputs. The first list is divded by the second list.
+--
+-- >>> divideTwoLists [4,9,14] [1,3,7]
+-- [4,3,2]
 --
 -- Testing: Test.Groups.List
 -------------------------------------------------------------------------
@@ -155,7 +162,12 @@ divideTwoLists a b = combineLists a b []
         then combineLists xs ys (out <> [x])          -- keep the number
         else combineLists xs ys (out <> [divide x y]) -- integer division
 -------------------------------------------------------------------------
--- | divide each element of a list by some scaler into a new list
+-- | Divide each element of a list by a scaler into a new list.
+-- The length of the list will be equal to the input list. Empty list inputs
+-- return empty list outputs. Dividing by zero changes nothing.
+--
+-- >>> divideAList [3,6,9] 3
+-- [1,2,3]
 --
 -- Testing: Test.Groups.List
 -------------------------------------------------------------------------
@@ -169,8 +181,17 @@ divideAList a scale'' = combineLists a scale'' []
         then combineLists xs scale' (out <> [x])               -- keep the number
         else combineLists xs scale' (out <> [divide x scale']) -- integer division
 -------------------------------------------------------------------------
--- | Check if the policy id is in the list of policy id from some value
+-- | Check if the policy id is in the list of policy id from some value.
+-- If nothing is found or if the input is an empty list then its false.
 --
+-- This is designed to be combined with Value.symbols. It's a great way
+-- to check if a specific policy id is contained within some validating value.
+--
+-- @
+-- -- The list of 'CurrencySymbol's of a 'Value'.
+-- symbols :: Value -> [CurrencySymbol]
+-- @
+-- 
 -- Testing: Test.Groups.Value
 -------------------------------------------------------------------------
 checkForCurrencySymbol :: [V2.CurrencySymbol] -> V2.CurrencySymbol -> Bool
@@ -180,7 +201,19 @@ checkForCurrencySymbol (x:xs) cs =
     then True 
     else checkForCurrencySymbol xs cs
 -------------------------------------------------------------------------
--- | Count how many redeemers are being used inside the tx.
+-- | Count how many redeemers are being used inside the tx. This can be used
+-- to force the number of redeemers used when spending multiple script utxos.
+-- This is designed to be used with the script context inside a validation script.
+--
+-- @
+-- toList :: Foldable t => t a -> [a]
+--
+-- -- A `Map` is Foldable.
+-- txInfoRedeemers :: Map ScriptPurpose Redeemer
+--
+-- redeemers :: [Redeemer]
+-- redeemers = toList $ txInfoRedeemers $ scriptContextTxInfo  scriptContext
+-- @
 --
 -- Testing: Test.Groups.Value
 -------------------------------------------------------------------------

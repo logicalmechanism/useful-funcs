@@ -55,7 +55,15 @@ To compile and view the haddock documentation run from the parent directory.
 cd useful-funcs
 cabal haddock --ghc --cabal-file=useful-funcs.cabal >> output
 docPath=$(tail -n 1 output)
+rm -rf ../docs
 cp -r ${docPath%index.html} ../docs
 cd ../docs
 firefox index.html
+```
+
+Or build and view immediately from the parent directory..
+```bash
+cd useful-funcs
+cabal haddock --ghc --cabal-file=useful-funcs.cabal >> output
+firefox $(tail -n 1 output)
 ```
