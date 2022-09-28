@@ -4,7 +4,7 @@ A collection of useful functions are contained inside this repo so it can be use
 
 ## Build and Test
 
-To build out the project from the parent directory.
+To build the project from the parent directory run these cabal commands.
 
 ```bash
 cd useful-funcs
@@ -13,9 +13,10 @@ cabal update
 cabal build -w ghc-8.10.7
 ```
 
-To run all the tests.
+To run all the tests from inside the useful-funcs contract folder run `cabal test`.
 
-```hs
+```bash
+cd useful-funcs
 cabal test
 ```
 
@@ -31,16 +32,17 @@ source-repository-package
   subdir: useful-funcs
 ```
 
-Then add in useful-funcs into your .cabal file for a build dependency.
+Then add in `useful-funcs` into your .cabal file as a build dependency.
 
 ```cabal
   ...
   exposed-modules: Contract
+
   build-depends:   useful-funcs
   ...
 ```
 
-Inside the contract, useful functions can be imported with
+Inside the contract, useful functions may be imported with the code below.
 
 ```hs
 import UsefulFuncs
@@ -50,7 +52,9 @@ Now the contract has access to all the useful functions inside the repo.
 
 ## Documentation
 
-To compile and view the haddock documentation run from the parent directory.
+[Documentation Link](https://htmlpreview.github.io/?https://raw.githubusercontent.com/logicalmechanism/useful-funcs/main/docs/UsefulFuncs.html)
+
+To compile and view the haddock documentation run these commands from the parent directory.
 
 ```bash
 cd useful-funcs
@@ -62,7 +66,7 @@ cd ../docs
 firefox index.html
 ```
 
-Or build and view immediately from the parent directory.
+To compile and view the haddock documentation immediately run these commands from the parent directory.
 
 ```bash
 cd useful-funcs
@@ -70,4 +74,4 @@ cabal haddock --ghc --cabal-file=useful-funcs.cabal >> output
 firefox $(tail -n 1 output)
 ```
 
-[Documentation Link](https://htmlpreview.github.io/?https://raw.githubusercontent.com/logicalmechanism/useful-funcs/main/docs/UsefulFuncs.html)
+Replace firefox with any suitable browser if requried.
