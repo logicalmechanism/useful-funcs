@@ -24,6 +24,7 @@ import UsefulFuncs ( replicate
                    , baseQ
                    , convertByteStringToInteger
                    , pow
+                   , percentage
                    )
 --------------------------------------------------------------------------------
 
@@ -55,7 +56,8 @@ prop_ByteStringManipulationTest = do
 prop_IntegerToStringTest = do
   { let a = integerAsByteString 1234567890 == "1234567890"
   ; let b = integerAsByteString 0          == "0"
-  ; all (==(True :: Bool)) [a,b]
+  ; let c = integerAsByteString (-123)     == "-123"
+  ; all (==(True :: Bool)) [a,b,c]
   }
 
 -- write n in base q
@@ -86,6 +88,15 @@ prop_PowTest = do
   ; all (==(True :: Bool)) [a,b,c,d]
   }
 
+-- pow stuff
+prop_PercentageTest = do
+  { let a = percentage 1           0   ==  0
+  ; let b = percentage 100000000   40  ==  2500000
+  ; let c = percentage 100000000 (-40) == -2500000
+  ; let d = percentage 10          100 ==  0
+  ; all (==(True :: Bool)) [a,b,c,d]
+  }
+
 tests :: [TestTree]
 tests = [ testProperty "Replicate List N Times"  prop_ReplicateTest
         , testProperty "Log Of x In base b"      prop_LogTest
@@ -94,4 +105,5 @@ tests = [ testProperty "Replicate List N Times"  prop_ReplicateTest
         , testProperty "Write N In Base Q"       prop_BaseQTest
         , testProperty "Convert String To Int"   prop_ConvertByteStringToIntegerTest
         , testProperty "x To The Power Of n"     prop_PowTest
+        , testProperty "Percentage of some n"    prop_PercentageTest
         ]

@@ -63,6 +63,8 @@ module UsefulFuncs
   , convertByteStringToInteger
   , divideTwoLists
   , divideAList
+  , adaValue
+  , percentage
   ) where
 import PlutusTx.Prelude
 import Plutus.V2.Ledger.Api        as V2
@@ -180,6 +182,17 @@ divideAList a scale'' = combineLists a scale'' []
       if scale' == 0 
         then combineLists xs scale' (out <> [x])               -- keep the number
         else combineLists xs scale' (out <> [divide x scale']) -- integer division
+-------------------------------------------------------------------------
+-- | Create a pure ada singleton with a known amount of lovelace. The amount
+-- may be positive or negative depending on the use case.
+--
+-- >>> adaValue 123
+-- Value (Map [(,Map [("",123)])])
+--
+-- Testing: Test.Groups.Value
+-------------------------------------------------------------------------
+adaValue :: Integer -> V2.Value
+adaValue amt = Value.singleton Value.adaSymbol Value.adaToken amt
 -------------------------------------------------------------------------
 -- | Check if the policy id is in the list of policy id from some value.
 -- If nothing is found or if the input is an empty list then its false.
@@ -490,10 +503,25 @@ byteStringAsIntegerList str' = createList str' 0 []
 pow :: Integer -> Integer -> Integer
 pow x n = 
     if n < 0 then 0 else
-      if n == 0 then 1 else -- assumes 0^0=1 and not 0
+      if n == 0 then 1 else -- assumes 0^0=1 and not 0, sorry math
       if even n 
         then pow (x * x)  (divide n 2)
         else x * pow (x * x) (divide (n - 1) 2)
+-------------------------------------------------------------------------------
+-- | Calculate the percentage of some integer. Integer division applies here so
+-- there are only so many possible outcomes. If the pct is zero then the amount
+-- is zero.
+--
+-- >>> percentage 1234567890 40
+-- 30864197
+--
+-- Testing: Test.Groups.Helpers
+-------------------------------------------------------------------------------
+percentage :: Integer -> Integer -> Integer
+percentage amt pct = 
+  if pct == 0
+    then 0              -- zero percent is zero
+    else divide amt pct
 -------------------------------------------------------------------------------
 -- | Convert an integer into a string. This converts an integer into a list of
 -- integers representing the digit in base 10. This list is feed into a mapping
@@ -506,10 +534,16 @@ pow x n =
 -- Testing: Test.Groups.Helpers
 -------------------------------------------------------------------------------
 integerAsByteString :: Integer -> V2.BuiltinByteString
-integerAsByteString num = if num == 0 then "0" else convertToString base10 ""
+integerAsByteString num = 
+  if num == 0 
+    then "0" 
+    else 
+      if num > 0
+        then convertToString (base10 num) "" 
+        else "-" <> convertToString (base10 (-1*num)) "" -- attach the negative sign
   where
-    base10 :: [Integer]
-    base10 = baseQ num 10
+    base10 :: Integer -> [Integer]
+    base10 num' = baseQ num' 10
 
     convertToString :: [Integer] -> BuiltinByteString -> BuiltinByteString
     convertToString []     str = str

@@ -2,6 +2,8 @@
 
 A collection of useful functions are contained inside this repo so it can be used readily in new projects and by other developers. Tasty is used to do the testing. There may be better ways to write these functions but they are tested and they work well on-chain.
 
+[Documentation](https://htmlpreview.github.io/?https://raw.githubusercontent.com/logicalmechanism/useful-funcs/main/docs/UsefulFuncs.html)
+
 ## Build and Test
 
 To build the project from the parent directory run these cabal commands.
@@ -52,9 +54,10 @@ Now the contract has access to all the useful functions inside the repo.
 
 ## Documentation
 
-[Documentation Link](https://htmlpreview.github.io/?https://raw.githubusercontent.com/logicalmechanism/useful-funcs/main/docs/UsefulFuncs.html)
+There is auto generated [documentation](https://htmlpreview.github.io/?https://raw.githubusercontent.com/logicalmechanism/useful-funcs/main/docs/UsefulFuncs.html) for this library. It is generated using Haddock.
 
-To compile and view the haddock documentation run these commands from the parent directory.
+
+Run these commands from the parent directory to compile and view the haddock documentation locally.
 
 ```bash
 cd useful-funcs
@@ -66,7 +69,7 @@ cd ../docs
 firefox index.html
 ```
 
-To compile and view the haddock documentation immediately run these commands from the parent directory.
+Run these commands from the parent directory to compile and view the haddock documentation immediately .
 
 ```bash
 cd useful-funcs

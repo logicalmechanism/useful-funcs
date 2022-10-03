@@ -24,8 +24,16 @@ import Test.Tasty.QuickCheck
 
 import UsefulFuncs ( checkForCurrencySymbol
                    , isNRedeemers
+                   , adaValue
                    )
 --------------------------------------------------------------------------------
+
+prop_CreateAdaSingleton = do 
+  { let a = Value.isZero $ adaValue 0
+  ; let b = Value.geq (adaValue 5) (adaValue 3)
+  ; let c = Value.isZero ((adaValue 123) + (adaValue (-123)))
+  ; all (==(True :: Bool)) [a,b,c]
+  }
 
 -- count the redeemers
 prop_IsNRedeemersTest = do 
@@ -56,4 +64,5 @@ targetCurrency = CurrencySymbol "acab"
 tests :: [TestTree]
 tests = [ testProperty "Currency in Currency List Test"  prop_CurrencyInListTest 
         , testProperty "Count The redeemers in the list" prop_IsNRedeemersTest
+        , testProperty "Create a proper ADA singleton"   prop_CreateAdaSingleton
         ]  
