@@ -30,7 +30,7 @@ Add this to the cabal.project file and update the tag to the most current releas
 source-repository-package
   type: git
   location: https://github.com/logicalmechanism/useful-funcs
-  tag: 0274d6c59b2bea7d6af01b656f8d06503109641f
+  tag: c389842f483f42ac5882244ee32861471435b7f0
   subdir: useful-funcs
 ```
 
