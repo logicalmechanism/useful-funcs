@@ -56,6 +56,7 @@ The module is split into different sub functions in case importing the entire us
 
 ```hs
 import TimeFuncs
+import ValueFuncs
 ```
 
 ## Documentation

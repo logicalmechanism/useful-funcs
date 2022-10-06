@@ -631,3 +631,131 @@ Warning: UsefulFuncs: could not find link destinations for:
 	- PlutusTx.AssocMap.Map
 Documentation created:
 /home/logic/Documents/Work/LogicalMechanism/useful-funcs/dist-newstyle/build/x86_64-linux/ghc-8.10.7/useful-funcs-0/doc/html/useful-funcs/index.html
+Build profile: -w ghc-8.10.7 -O1
+In order, the following will be built (use -v for more details):
+ - useful-funcs-0 (lib) (ephemeral targets)
+Preprocessing library for useful-funcs-0..
+Running Haddock on library for useful-funcs-0..
+Haddock coverage:
+ 100% (  7 /  7) in 'AddressFuncs'
+ 100% (  8 /  8) in 'ListFuncs'
+ 100% (  6 /  6) in 'MathFuncs'
+ 100% (  2 /  2) in 'CryptoFuncs'
+ 100% (  6 /  6) in 'StringFuncs'
+ 100% (  5 /  5) in 'TimeFuncs'
+Warning: 'Map' is ambiguous. It is defined
+    * in ‘PlutusCore.Data’
+    * in ‘PlutusTx.AssocMap’
+    You may be able to disambiguate the identifier by qualifying it or
+    by specifying the type/value namespace explicitly.
+    Defaulting to the one defined in ‘PlutusTx.AssocMap’
+ 100% (  4 /  4) in 'ValueFuncs'
+ 100% ( 32 / 32) in 'UsefulFuncs'
+Warning: AddressFuncs: could not find link destinations for:
+
+	- Plutus.V2.Ledger.Contexts.TxInfo
+	- Plutus.V1.Ledger.Crypto.PubKeyHash
+	- Plutus.V2.Ledger.Tx.TxOut
+	- Plutus.V1.Ledger.Address.Address
+	- Plutus.V1.Ledger.Value.Value
+	- Plutus.V1.Ledger.Value.CurrencySymbol
+	- Plutus.V1.Ledger.Value.TokenName
+	- Plutus.V2.Ledger.Contexts.TxInInfo
+Warning: StringFuncs: could not find link destinations for:
+
+	- PlutusTx.Builtins.Internal.BuiltinByteString
+Warning: TimeFuncs: could not find link destinations for:
+
+	- Plutus.V1.Ledger.Interval.Interval
+	- Plutus.V1.Ledger.Time.POSIXTime
+	- Plutus.V1.Ledger.Time.POSIXTimeRange
+	- Plutus.V1.Ledger.Interval.contains
+Warning: ValueFuncs: could not find link destinations for:
+
+	- Plutus.V1.Ledger.Value.Value
+	- Plutus.V1.Ledger.Value.CurrencySymbol
+	- Plutus.V1.Ledger.Scripts.Redeemer
+	- PlutusTx.AssocMap.Map
+Warning: UsefulFuncs: could not find link destinations for:
+
+	- PlutusTx.Builtins.Internal.BuiltinByteString
+	- Plutus.V2.Ledger.Tx.TxOut
+	- Plutus.V1.Ledger.Address.Address
+	- Plutus.V1.Ledger.Value.Value
+	- Plutus.V1.Ledger.Value.CurrencySymbol
+	- Plutus.V1.Ledger.Value.TokenName
+	- Plutus.V2.Ledger.Contexts.TxInInfo
+	- Plutus.V1.Ledger.Crypto.PubKeyHash
+	- Plutus.V2.Ledger.Contexts.TxInfo
+	- Plutus.V1.Ledger.Interval.Interval
+	- Plutus.V1.Ledger.Time.POSIXTime
+	- Plutus.V1.Ledger.Time.POSIXTimeRange
+	- Plutus.V1.Ledger.Interval.contains
+	- Plutus.V1.Ledger.Scripts.Redeemer
+	- PlutusTx.AssocMap.Map
+Documentation created:
+/home/logic/Documents/Work/LogicalMechanism/useful-funcs/dist-newstyle/build/x86_64-linux/ghc-8.10.7/useful-funcs-0/doc/html/useful-funcs/index.html
+Build profile: -w ghc-8.10.7 -O1
+In order, the following will be built (use -v for more details):
+ - useful-funcs-0 (lib) (file src/StringFuncs.hs changed)
+Preprocessing library for useful-funcs-0..
+Running Haddock on library for useful-funcs-0..
+Haddock coverage:
+ 100% (  7 /  7) in 'AddressFuncs'
+ 100% (  8 /  8) in 'ListFuncs'
+ 100% (  6 /  6) in 'MathFuncs'
+ 100% (  2 /  2) in 'CryptoFuncs'
+ 100% (  6 /  6) in 'StringFuncs'
+ 100% (  5 /  5) in 'TimeFuncs'
+Warning: 'Map' is ambiguous. It is defined
+    * in ‘PlutusCore.Data’
+    * in ‘PlutusTx.AssocMap’
+    You may be able to disambiguate the identifier by qualifying it or
+    by specifying the type/value namespace explicitly.
+    Defaulting to the one defined in ‘PlutusTx.AssocMap’
+ 100% (  4 /  4) in 'ValueFuncs'
+ 100% ( 32 / 32) in 'UsefulFuncs'
+Warning: AddressFuncs: could not find link destinations for:
+
+	- Plutus.V2.Ledger.Contexts.TxInfo
+	- Plutus.V1.Ledger.Crypto.PubKeyHash
+	- Plutus.V2.Ledger.Tx.TxOut
+	- Plutus.V1.Ledger.Address.Address
+	- Plutus.V1.Ledger.Value.Value
+	- Plutus.V1.Ledger.Value.CurrencySymbol
+	- Plutus.V1.Ledger.Value.TokenName
+	- Plutus.V2.Ledger.Contexts.TxInInfo
+Warning: StringFuncs: could not find link destinations for:
+
+	- PlutusTx.Builtins.Internal.BuiltinByteString
+Warning: TimeFuncs: could not find link destinations for:
+
+	- Plutus.V1.Ledger.Interval.Interval
+	- Plutus.V1.Ledger.Time.POSIXTime
+	- Plutus.V1.Ledger.Time.POSIXTimeRange
+	- Plutus.V1.Ledger.Interval.contains
+Warning: ValueFuncs: could not find link destinations for:
+
+	- Plutus.V1.Ledger.Value.Value
+	- Plutus.V1.Ledger.Value.CurrencySymbol
+	- Plutus.V1.Ledger.Scripts.Redeemer
+	- PlutusTx.AssocMap.Map
+Warning: UsefulFuncs: could not find link destinations for:
+
+	- PlutusTx.Builtins.Internal.BuiltinByteString
+	- Plutus.V2.Ledger.Tx.TxOut
+	- Plutus.V1.Ledger.Address.Address
+	- Plutus.V1.Ledger.Value.Value
+	- Plutus.V1.Ledger.Value.CurrencySymbol
+	- Plutus.V1.Ledger.Value.TokenName
+	- Plutus.V2.Ledger.Contexts.TxInInfo
+	- Plutus.V1.Ledger.Crypto.PubKeyHash
+	- Plutus.V2.Ledger.Contexts.TxInfo
+	- Plutus.V1.Ledger.Interval.Interval
+	- Plutus.V1.Ledger.Time.POSIXTime
+	- Plutus.V1.Ledger.Time.POSIXTimeRange
+	- Plutus.V1.Ledger.Interval.contains
+	- Plutus.V1.Ledger.Scripts.Redeemer
+	- PlutusTx.AssocMap.Map
+Documentation created:
+/home/logic/Documents/Work/LogicalMechanism/useful-funcs/dist-newstyle/build/x86_64-linux/ghc-8.10.7/useful-funcs-0/doc/html/useful-funcs/index.html

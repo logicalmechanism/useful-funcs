@@ -27,13 +27,13 @@
 {-# OPTIONS_GHC -fexpose-all-unfoldings       #-}
 {-|
 Module      : UsefulFuncs
-Description : A Collection of Useful Functions
+Description : A Collection of all the Useful Functions
 Copyright   : (c) Ancient Kraken, 2022
 License     : GPL-3
 Maintainer  : logical.mechanism@protonmail.com
 Stability   : stable
 
-A collection of tested on and off chain plutus functions.
+A collection of tested on and off chain plutus useful functions.
 -}
 module UsefulFuncs
   ( StringFuncs.integerAsByteString

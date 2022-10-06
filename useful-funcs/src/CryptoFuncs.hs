@@ -51,7 +51,6 @@ import MathFuncs                   ( powmod )
 verifyDiscretLogarithm :: Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Bool
 verifyDiscretLogarithm g r c q z u = powmod g z q == productPowMod
   where
-
     productPowMod :: Integer
     productPowMod = 
       if w >= q

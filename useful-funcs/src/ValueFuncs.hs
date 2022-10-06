@@ -27,13 +27,13 @@
 {-# OPTIONS_GHC -fexpose-all-unfoldings       #-}
 {-|
 Module      : ValueFuncs
-Description : A Collection of value Functions and others
+Description : A Collection of value Functions
 Copyright   : (c) Ancient Kraken, 2022
 License     : GPL-3
 Maintainer  : logical.mechanism@protonmail.com
 Stability   : stable
 
-A collection of tested on and off chain plutus  value functions.
+A collection of tested on and off chain plutus value functions.
 -}
 module ValueFuncs
   ( adaValue

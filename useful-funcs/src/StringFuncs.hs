@@ -33,7 +33,7 @@ License     : GPL-3
 Maintainer  : logical.mechanism@protonmail.com
 Stability   : stable
 
-A collection of tested on and off chain plutus list functions.
+A collection of tested on and off chain plutus string functions.
 -}
 module StringFuncs
   ( byteStringAsIntegerList
