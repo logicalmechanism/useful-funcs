@@ -52,6 +52,12 @@ import UsefulFuncs
 
 Now the contract has access to all the useful functions inside the repo.
 
+The module is split into different sub functions in case importing the entire usefulfuncs is too much overhead. The submodules can be imported in a similar fashion. Refer to the documentation for a list of the various submodules that make up useful funcs.
+
+```hs
+import TimeFuncs
+```
+
 ## Documentation
 
 There is auto generated [documentation](https://htmlpreview.github.io/?https://raw.githubusercontent.com/logicalmechanism/useful-funcs/main/docs/UsefulFuncs.html) for this library. It is generated using Haddock.

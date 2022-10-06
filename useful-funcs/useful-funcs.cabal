@@ -85,6 +85,13 @@ library
   hs-source-dirs:       src
 
   exposed-modules:      UsefulFuncs
+                        ListFuncs
+                        ValueFuncs
+                        TimeFuncs
+                        AddressFuncs
+                        StringFuncs
+                        MathFuncs
+                        CryptoFuncs
 
   build-depends:        plutus-ledger-api
                       , plutus-tx
@@ -97,7 +104,13 @@ test-suite useful-func-test
                       , maybe-Win32
   type:                 exitcode-stdio-1.0
   main-is:              Spec.hs
-  other-modules:        Groups.Helpers
+  other-modules:        Groups.Address
+                        Groups.Crypto
+                        Groups.List
+                        Groups.Math
+                        Groups.String
+                        Groups.Time
+                        Groups.Value
 
 
   build-depends:
