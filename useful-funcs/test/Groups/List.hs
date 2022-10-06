@@ -6,30 +6,31 @@ module Groups.List (tests) where
 --------------------------------------------------------------------------------
 
 import PlutusTx.Prelude
-import Plutus.V1.Ledger.Address
-import Plutus.V2.Ledger.Api        as V2
-import Plutus.V2.Ledger.Contexts   as V2
-import Plutus.V1.Ledger.Value      as Value
-import Plutus.V1.Ledger.Time       as Time
-import Plutus.V1.Ledger.Interval   as Interval
-import PlutusTx.Builtins.Internal (mkI)
 
 --------------------------------------------------------------------------------
 
-import Test.QuickCheck
 import Test.Tasty
 import Test.Tasty.QuickCheck
 
 --------------------------------------------------------------------------------
 
-import UsefulFuncs ( addTwoLists
-                   , subTwoLists
-                   , multiplyTwoLists
-                   , multiplyAList
-                   , divideTwoLists
-                   , divideAList
-                   )
+import ListFuncs ( addTwoLists
+                 , subTwoLists
+                 , multiplyTwoLists
+                 , multiplyAList
+                 , divideTwoLists
+                 , divideAList
+                 , replicate
+                 )
 --------------------------------------------------------------------------------
+
+-- replicate list stuff
+prop_ReplicateTest = do
+  { let a = replicate [1,2,3] 2 == [1,2,3,1,2,3]
+  ; let b = replicate []      2 == []
+  ; let c = replicate [1,2,3] 0 == []
+  ; all (==(True :: Bool)) [a,b,c]
+  }
 
 -- add two list together element by element to create a new list
 prop_AddListTest = do 
@@ -94,4 +95,5 @@ tests = [ testProperty "Add List Test"      prop_AddListTest
         , testProperty "Scale List Test"    prop_MultiplyAListTest
         , testProperty "Divide List Test"   prop_DivideTwoListTest
         , testProperty "Reduce List Test"   prop_DivideAListTest
+        , testProperty "Repli List N Times" prop_ReplicateTest
         ]  

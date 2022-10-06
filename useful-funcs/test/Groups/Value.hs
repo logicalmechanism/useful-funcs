@@ -6,26 +6,21 @@ module Groups.Value (tests) where
 --------------------------------------------------------------------------------
 
 import PlutusTx.Prelude
-import Plutus.V1.Ledger.Address
 import Plutus.V2.Ledger.Api        as V2
-import Plutus.V2.Ledger.Contexts   as V2
 import Plutus.V1.Ledger.Value      as Value
-import Plutus.V1.Ledger.Time       as Time
-import Plutus.V1.Ledger.Interval   as Interval
 import PlutusTx.Builtins.Internal (mkI)
 
 --------------------------------------------------------------------------------
 
-import Test.QuickCheck
 import Test.Tasty
 import Test.Tasty.QuickCheck
 
 --------------------------------------------------------------------------------
 
-import UsefulFuncs ( checkForCurrencySymbol
-                   , isNRedeemers
-                   , adaValue
-                   )
+import ValueFuncs ( checkForCurrencySymbol
+                  , isNRedeemers
+                  , adaValue
+                  )
 --------------------------------------------------------------------------------
 
 prop_CreateAdaSingleton = do 

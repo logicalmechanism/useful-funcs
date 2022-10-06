@@ -9,17 +9,16 @@ import PlutusTx.Prelude
 
 --------------------------------------------------------------------------------
 
-import Test.QuickCheck
 import Test.Tasty
 import Test.Tasty.QuickCheck
 
 --------------------------------------------------------------------------------
 
-import UsefulFuncs ( lockUntilTimeInterval
-                   , lockBetweenTimeInterval
-                   , isTxInsideInterval
-                   , isTxOutsideInterval
-                   )
+import TimeFuncs ( lockUntilTimeInterval
+                 , lockBetweenTimeInterval
+                 , isTxInsideInterval
+                 , isTxOutsideInterval
+                 )
 --------------------------------------------------------------------------------
 
 -- test if ranges are in or outside or some other range. no crossovers intervals
