@@ -41,10 +41,9 @@ module ValueFuncs
   , isNRedeemers
   ) where
 import PlutusTx.Prelude
-import Plutus.V2.Ledger.Api        as V2
-import Plutus.V1.Ledger.Value      as Value
-
-
+import Plutus.V2.Ledger.Api   as V2
+import Plutus.V1.Ledger.Value as Value
+-------------------------------------------------------------------------
 -- | Create a pure ada singleton with a known amount of lovelace. The amount
 -- may be positive or negative depending on the use case.
 --
@@ -53,6 +52,7 @@ import Plutus.V1.Ledger.Value      as Value
 --
 -- Testing: Test.Groups.Value
 -------------------------------------------------------------------------
+{-# INLINABLE adaValue #-}
 adaValue :: Integer -> V2.Value
 adaValue amt = Value.singleton Value.adaSymbol Value.adaToken amt
 -------------------------------------------------------------------------
@@ -69,6 +69,7 @@ adaValue amt = Value.singleton Value.adaSymbol Value.adaToken amt
 -- 
 -- Testing: Test.Groups.Value
 -------------------------------------------------------------------------
+{-# INLINABLE checkForCurrencySymbol #-}
 checkForCurrencySymbol :: [V2.CurrencySymbol] -> V2.CurrencySymbol -> Bool
 checkForCurrencySymbol []     _  = False
 checkForCurrencySymbol (x:xs) cs =
@@ -92,6 +93,7 @@ checkForCurrencySymbol (x:xs) cs =
 --
 -- Testing: Test.Groups.Value
 -------------------------------------------------------------------------
+{-# INLINABLE isNRedeemers #-}
 isNRedeemers :: [V2.Redeemer] -> Integer
 isNRedeemers redeemers = isNRedeemers' redeemers 0
   where

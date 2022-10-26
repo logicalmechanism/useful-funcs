@@ -33,7 +33,7 @@ License     : GPL-3
 Maintainer  : logical.mechanism@protonmail.com
 Stability   : stable
 
-A collection of tested on and off chain plutus useful functions.
+A collection of tested on-chain and off-chain plutus functions.
 -}
 module UsefulFuncs
   ( StringFuncs.integerAsByteString
@@ -41,8 +41,10 @@ module UsefulFuncs
   , StringFuncs.createBuiltinByteString
   , StringFuncs.hash
   , StringFuncs.convertByteStringToInteger
+  , StringFuncs.convertToString
   , AddressFuncs.isAddrGettingPaidExactly
-  , AddressFuncs.isAddrHoldingToken
+  , AddressFuncs.isAddrHoldingExactlyToken
+  , AddressFuncs.isAddrHoldingAtLeastToken
   , AddressFuncs.isNInputs
   , AddressFuncs.isNOutputs
   , AddressFuncs.createAddress
@@ -67,9 +69,8 @@ module UsefulFuncs
   , ValueFuncs.isNRedeemers
   , ValueFuncs.adaValue
   , CryptoFuncs.verifyDiscretLogarithm
-  -- , List
   ) where
--- import in the submodules and build out the big useful func module
+-- useful funcs is just a wrapper around all the sub modules
 import ListFuncs
 import ValueFuncs
 import TimeFuncs
@@ -77,4 +78,3 @@ import AddressFuncs
 import StringFuncs
 import MathFuncs
 import CryptoFuncs
--- useful funcs is a wrapper around all the sub modules

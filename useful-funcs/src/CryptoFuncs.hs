@@ -39,7 +39,7 @@ module CryptoFuncs
   ( verifyDiscretLogarithm
   ) where
 import PlutusTx.Prelude
-import MathFuncs                   ( powmod )
+import MathFuncs        ( powmod )
 -------------------------------------------------------------------------------
 -- | Given a generator g of prime order q and agreed upon r and c constants,
 -- verify that g^z = g^r * u^c mod q. This should allow a user to select some
@@ -48,6 +48,7 @@ import MathFuncs                   ( powmod )
 -- 
 -- Testing: Test.Groups.Crypto
 -------------------------------------------------------------------------------
+{-# INLINABLE verifyDiscretLogarithm #-}
 verifyDiscretLogarithm :: Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Bool
 verifyDiscretLogarithm g r c q z u = powmod g z q == productPowMod
   where

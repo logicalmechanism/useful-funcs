@@ -19,8 +19,22 @@ import StringFuncs ( hash
                    , createBuiltinByteString
                    , integerAsByteString
                    , convertByteStringToInteger
+                   , convertToString
+                   )
+
+import MathFuncs   ( baseQ
+                   , pow
                    )
 --------------------------------------------------------------------------------
+
+-- build a string a check the hash
+prop_ConvertToString = do
+  { let a = convertToString [0..15] "" == "0123456789abcdef"
+  ; let b = convertToString (baseQ (pow 3 334) 64) "" == "2ChYZcTlhHNbjZnxX4PFzuN5lg7Aqv4FipthKFSBx/Evkbw7vQ2mYhvUB2iWZtdN1yw2oOKkRrYALLzWmeIOmUGhV"
+  ; let c = convertToString [65] "" == ""
+  ; let d = convertToString [] "" == ""
+  ; all (==(True :: Bool)) [a,b,c,d]
+  }
 
 -- build a string a check the hash
 prop_ByteStringManipulationTest = do
@@ -52,4 +66,5 @@ tests :: [TestTree]
 tests = [ testProperty "Manipulate ByteStrings"  prop_ByteStringManipulationTest
         , testProperty "Write Integer As String" prop_IntegerToStringTest
         , testProperty "Convert String To Int"   prop_ConvertByteStringToIntegerTest
+        , testProperty "Convert [Int] To String" prop_ConvertToString
         ]

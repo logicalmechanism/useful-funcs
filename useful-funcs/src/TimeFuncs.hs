@@ -42,9 +42,9 @@ module TimeFuncs
   , lockBetweenTimeInterval
   ) where
 import PlutusTx.Prelude
-import Plutus.V2.Ledger.Api        as V2
-import Plutus.V1.Ledger.Time       as Time
-import Plutus.V1.Ledger.Interval   as Interval
+import Plutus.V2.Ledger.Api      as V2
+import Plutus.V1.Ledger.Time     as Time
+import Plutus.V1.Ledger.Interval as Interval
 -------------------------------------------------------------------------
 -- | Check if the validity range is inside a time interval. The validity 
 -- range must be completely contained within the time range.
@@ -59,6 +59,7 @@ import Plutus.V1.Ledger.Interval   as Interval
 --
 -- Testing: Test.Groups.Time
 -------------------------------------------------------------------------
+{-# INLINABLE isTxInsideInterval #-}
 isTxInsideInterval :: V2.Interval V2.POSIXTime -> V2.POSIXTimeRange -> Bool
 isTxInsideInterval timeRange txValidityRange = Interval.contains timeRange txValidityRange
 -------------------------------------------------------------------------
@@ -74,6 +75,7 @@ isTxInsideInterval timeRange txValidityRange = Interval.contains timeRange txVal
 --
 -- Testing: Test.Groups.Time
 -------------------------------------------------------------------------
+{-# INLINABLE isTxOutsideInterval #-}
 isTxOutsideInterval :: V2.Interval V2.POSIXTime -> V2.POSIXTimeRange -> Bool
 isTxOutsideInterval timeRange txValidityRange = not $ Interval.overlaps timeRange txValidityRange
 -------------------------------------------------------------------------------
@@ -86,6 +88,7 @@ isTxOutsideInterval timeRange txValidityRange = not $ Interval.overlaps timeRang
 --
 -- Testing: Test.Groups.Time
 -------------------------------------------------------------------------------
+{-# INLINABLE lockUntilTimeInterval #-}
 lockUntilTimeInterval :: Integer -> V2.Interval V2.POSIXTime
 lockUntilTimeInterval endingTime = Interval.to (integerToPOSIX endingTime)
 -------------------------------------------------------------------------
@@ -97,10 +100,12 @@ lockUntilTimeInterval endingTime = Interval.to (integerToPOSIX endingTime)
 --
 -- Testing: Test.Groups.Time
 -------------------------------------------------------------------------
+{-# INLINABLE lockBetweenTimeInterval #-}
 lockBetweenTimeInterval :: Integer -> Integer -> V2.Interval V2.POSIXTime
 lockBetweenTimeInterval startingTime endingTime = Interval.interval (integerToPOSIX startingTime) (integerToPOSIX endingTime)
 -------------------------------------------------------------------------
 -- | Create a proper time unit from an integer.
+--
 -- Not Exposed
 -------------------------------------------------------------------------
 integerToPOSIX :: Integer -> V2.POSIXTime
