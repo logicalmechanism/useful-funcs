@@ -41,12 +41,15 @@ module StringFuncs
   , hash
   , createBuiltinByteString
   , convertByteStringToInteger
+  , convertToString
   ) where
 import PlutusTx.Prelude
 import Plutus.V2.Ledger.Api        as V2
 import MathFuncs                   ( pow, baseQ )
 -------------------------------------------------------------------------------
 -- | The Mapping for converting an integer into a stringed version.
+-- This works well for base 64 or less.
+--
 -- Not Exposed
 -------------------------------------------------------------------------------
 integerToStringMapping :: Integer -> V2.BuiltinByteString
@@ -67,6 +70,54 @@ integerToStringMapping ch
   | ch == 13  = "d"
   | ch == 14  = "e"
   | ch == 15  = "f"
+  | ch == 16  = "g"
+  | ch == 17  = "h"
+  | ch == 18  = "i"
+  | ch == 19  = "j"
+  | ch == 20  = "k"
+  | ch == 21  = "l"
+  | ch == 22  = "m"
+  | ch == 23  = "n"
+  | ch == 24  = "o"
+  | ch == 25  = "p"
+  | ch == 26  = "q"
+  | ch == 27  = "r"
+  | ch == 28  = "s"
+  | ch == 29  = "t"
+  | ch == 30  = "u"
+  | ch == 31  = "v"
+  | ch == 32  = "w"
+  | ch == 33  = "x"
+  | ch == 34  = "y"
+  | ch == 35  = "z"
+  | ch == 36  = "A"
+  | ch == 37  = "B"
+  | ch == 38  = "C"
+  | ch == 39  = "D"
+  | ch == 40  = "E"
+  | ch == 41  = "F"
+  | ch == 42  = "G"
+  | ch == 43  = "H"
+  | ch == 44  = "I"
+  | ch == 45  = "J"
+  | ch == 46  = "K"
+  | ch == 47  = "L"
+  | ch == 48  = "M"
+  | ch == 49  = "N"
+  | ch == 50  = "O"
+  | ch == 51  = "P"
+  | ch == 52  = "Q"
+  | ch == 53  = "R"
+  | ch == 54  = "S"
+  | ch == 55  = "T"
+  | ch == 56  = "U"
+  | ch == 57  = "V"
+  | ch == 58  = "W"
+  | ch == 59  = "X"
+  | ch == 60  = "Y"
+  | ch == 61  = "Z"
+  | ch == 62  = "+"
+  | ch == 63  = "/"
   | otherwise = emptyByteString
 -------------------------------------------------------------------------------
 -- | The Mapping for converting an integer into a stringed version.
@@ -149,10 +200,19 @@ integerAsByteString num =
   where
     base10 :: Integer -> [Integer]
     base10 num' = baseQ num' 10
-
-    convertToString :: [Integer] -> BuiltinByteString -> BuiltinByteString
-    convertToString []     str = str
-    convertToString (x:xs) str = convertToString xs (str <> integerToStringMapping x)
+-------------------------------------------------------------------------------
+-- | Converts a list of integers into a string by mapping integers to letters up
+-- to the value of 64. This is unlike createBuiltinByteString which uses ascii codes
+-- to create a string where this is a one to one mapping.
+--
+-- >>> convertToString [0..64] ""
+-- "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/"
+--
+-- Testing: Test.Groups.String
+-------------------------------------------------------------------------------
+convertToString :: [Integer] -> BuiltinByteString -> BuiltinByteString
+convertToString []     str = str
+convertToString (x:xs) str = convertToString xs (str <> integerToStringMapping x)
 -------------------------------------------------------------------------------
 -- | Compute the sha3_256 hash of some bytestring.
 --
