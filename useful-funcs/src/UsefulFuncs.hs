@@ -43,7 +43,8 @@ module UsefulFuncs
   , StringFuncs.convertByteStringToInteger
   , StringFuncs.convertToString
   , AddressFuncs.isAddrGettingPaidExactly
-  , AddressFuncs.isAddrHoldingToken
+  , AddressFuncs.isAddrHoldingExactlyToken
+  , AddressFuncs.isAddrHoldingAtLeastToken
   , AddressFuncs.isNInputs
   , AddressFuncs.isNOutputs
   , AddressFuncs.createAddress

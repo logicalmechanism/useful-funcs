@@ -20,7 +20,8 @@ import Test.Tasty.QuickCheck
 
 import AddressFuncs ( createAddress
                     , isAddrGettingPaidExactly
-                    , isAddrHoldingToken
+                    , isAddrHoldingExactlyToken
+                    , isAddrHoldingAtLeastToken
                     , isNOutputs
                     , isNInputs
                     )
@@ -65,13 +66,24 @@ prop_IsAddrGettingPaidTest = do
   }
 
 -- test if an address can be paid by checking a tx out
-prop_IsAddrHoldingTokensTest = do
+prop_IsAddrHoldingExactlyTokensTest = do
   { let pkh    = "cdace48afd957724aa22ceaf04cbc269d58b46fab2f65ed71c1cb11d"
   ; let sc     = ""
   ; let addr   = createAddress pkh sc
-  ; let a      =       isAddrHoldingToken testTxOuts addr "acab" "beef" 10 -- check for token
-  ; let b      = not $ isAddrHoldingToken []         addr "acab" "beef" 10 -- no tx outs
-  ; let c      = not $ isAddrHoldingToken testTxOuts addr "acab" "beef" 5  -- check for bad token
+  ; let a      =       isAddrHoldingExactlyToken testTxOuts addr "acab" "beef" 10 -- check for token
+  ; let b      = not $ isAddrHoldingExactlyToken []         addr "acab" "beef" 10 -- no tx outs
+  ; let c      = not $ isAddrHoldingExactlyToken testTxOuts addr "acab" "beef" 5  -- check for bad token
+  ; all (==(True :: Bool)) [a,b,c]
+  }
+
+-- test if an address can be paid by checking a tx out
+prop_IsAddrHoldingAtLeastTokensTest = do
+  { let pkh    = "cdace48afd957724aa22ceaf04cbc269d58b46fab2f65ed71c1cb11d"
+  ; let sc     = ""
+  ; let addr   = createAddress pkh sc
+  ; let a      =       isAddrHoldingAtLeastToken testTxOuts addr "acab" "beef" 5 -- check for token
+  ; let b      = not $ isAddrHoldingAtLeastToken []         addr "acab" "beef" 10 -- no tx outs
+  ; let c      = not $ isAddrHoldingAtLeastToken testTxOuts addr "acab" "beef" 15  -- check for bad token
   ; all (==(True :: Bool)) [a,b,c]
   }
 
@@ -117,7 +129,8 @@ testTxInInfo = [goodTxInInfo]
 tests :: [TestTree]
 tests = [ testProperty "Proper Address Test"  prop_ProperAddressTest 
         , testProperty "Address Payout Test"  prop_IsAddrGettingPaidTest
-        , testProperty "Address Holding Test" prop_IsAddrHoldingTokensTest
+        , testProperty "Holding Exactly Test" prop_IsAddrHoldingExactlyTokensTest
+        , testProperty "Holding AtLeast Test" prop_IsAddrHoldingAtLeastTokensTest
         , testProperty "Is N Output Test"     prop_isNOutputsTest
         , testProperty "Is N Input Test"      prop_isNInputsTest
         ]
