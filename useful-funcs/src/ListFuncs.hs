@@ -55,7 +55,7 @@ import PlutusTx.Prelude
 -- 
 -- Testing: Test.Groups.List
 -------------------------------------------------------------------------
-{-# INLINABLE addTwoList #-}
+{-# INLINABLE addTwoLists #-}
 addTwoLists :: [Integer] -> [Integer] -> [Integer]
 addTwoLists a b = combineLists a b []
   where

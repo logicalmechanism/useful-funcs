@@ -50,7 +50,8 @@ import PlutusTx.Prelude
 -- 135005697
 --
 -- Testing: Test.Groups.Math
-------------------------------------------------------------------------------- 
+-------------------------------------------------------------------------------
+{-# INLINABLE pow #-}
 pow :: Integer -> Integer -> Integer
 pow x n = 
     if n < 0 then 0 else
@@ -66,6 +67,7 @@ pow x n =
 --
 -- Testing: Test.Groups.Math
 -------------------------------------------------------------------------------
+{-# INLINABLE powmod #-}
 powmod :: Integer -> Integer -> Integer -> Integer
 powmod x n q = 
   if q == 0 
@@ -81,6 +83,7 @@ powmod x n q =
 --
 -- Testing: Test.Groups.Math
 -------------------------------------------------------------------------------
+{-# INLINABLE percentage #-}
 percentage :: Integer -> Integer -> Integer
 percentage amt pct = 
   if pct == 0
@@ -95,6 +98,7 @@ percentage amt pct =
 --
 -- Testing: Test.Groups.Math
 -------------------------------------------------------------------------------
+{-# INLINABLE baseQ #-}
 baseQ :: Integer -> Integer -> [Integer]
 baseQ number base = if base == 0 then [] else baseQ' number base []
   where
@@ -111,6 +115,7 @@ baseQ number base = if base == 0 then [] else baseQ' number base []
 --
 -- Testing: Test.Groups.Math
 -------------------------------------------------------------------------
+{-# INLINABLE logOfXInBaseB #-}
 logOfXInBaseB :: Integer -> Integer -> Integer
 logOfXInBaseB x b = if b <= 0 then 0 else if x == b then 1 else
   if x < b
