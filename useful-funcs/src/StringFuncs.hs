@@ -44,8 +44,8 @@ module StringFuncs
   , convertToString
   ) where
 import PlutusTx.Prelude
-import Plutus.V2.Ledger.Api        as V2
-import MathFuncs                   ( pow, baseQ )
+import Plutus.V2.Ledger.Api as V2
+import MathFuncs            ( pow, baseQ )
 -------------------------------------------------------------------------------
 -- | The Mapping for converting an integer into a stringed version.
 -- This works well for base 64 or less.
@@ -121,6 +121,7 @@ integerToStringMapping ch
   | otherwise = emptyByteString
 -------------------------------------------------------------------------------
 -- | The Mapping for converting an integer into a stringed version.
+--
 -- Not Exposed
 -------------------------------------------------------------------------------
 stringToIntegerMapping :: V2.BuiltinByteString -> Integer
@@ -155,6 +156,7 @@ stringToIntegerMapping ch
 --
 -- Testing: Test.Groups.String
 -------------------------------------------------------------------------------
+{-# INLINABLE byteStringAsIntegerList #-}
 byteStringAsIntegerList :: V2.BuiltinByteString -> [Integer]
 byteStringAsIntegerList str' = createList str' 0 []
   where
@@ -189,6 +191,7 @@ byteStringAsIntegerList str' = createList str' 0 []
 --
 -- Testing: Test.Groups.String
 -------------------------------------------------------------------------------
+{-# INLINABLE integerAsByteString #-}
 integerAsByteString :: Integer -> V2.BuiltinByteString
 integerAsByteString num = 
   if num == 0 
@@ -210,6 +213,7 @@ integerAsByteString num =
 --
 -- Testing: Test.Groups.String
 -------------------------------------------------------------------------------
+{-# INLINABLE convertToString #-}
 convertToString :: [Integer] -> BuiltinByteString -> BuiltinByteString
 convertToString []     str = str
 convertToString (x:xs) str = convertToString xs (str <> integerToStringMapping x)
@@ -223,6 +227,7 @@ convertToString (x:xs) str = convertToString xs (str <> integerToStringMapping x
 --
 -- Testing: Test.Groups.String
 -------------------------------------------------------------------------------
+{-# INLINABLE hash #-}
 hash :: V2.BuiltinByteString -> V2.BuiltinByteString
 hash string = sha3_256 string
 -------------------------------------------------------------------------
@@ -237,6 +242,7 @@ hash string = sha3_256 string
 --
 -- Testing: Test.Groups.String
 -------------------------------------------------------------------------
+{-# INLINABLE createBuiltinByteString #-}
 createBuiltinByteString :: [Integer] -> V2.BuiltinByteString
 createBuiltinByteString intList = flattenBuiltinByteString [ consByteString x emptyByteString | x <- intList]
   where
@@ -250,6 +256,7 @@ createBuiltinByteString intList = flattenBuiltinByteString [ consByteString x em
 --
 -- Testing: Test.Groups.String
 -------------------------------------------------------------------------
+{-# INLINABLE convertByteStringToInteger #-}
 convertByteStringToInteger :: BuiltinByteString -> Integer
 convertByteStringToInteger hexString = 
   if hexString == emptyByteString
