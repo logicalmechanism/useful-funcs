@@ -55,6 +55,7 @@ import PlutusTx.Prelude
 -- 
 -- Testing: Test.Groups.List
 -------------------------------------------------------------------------
+{-# INLINABLE addTwoList #-}
 addTwoLists :: [Integer] -> [Integer] -> [Integer]
 addTwoLists a b = combineLists a b []
   where
@@ -73,6 +74,7 @@ addTwoLists a b = combineLists a b []
 --
 -- Testing: Test.Groups.List
 -------------------------------------------------------------------------
+{-# INLINABLE subTwoLists #-}
 subTwoLists :: [Integer] -> [Integer] -> [Integer]
 subTwoLists a b = combineLists a b []
   where
@@ -93,6 +95,7 @@ subTwoLists a b = combineLists a b []
 --
 -- Testing: Test.Groups.List
 -------------------------------------------------------------------------
+{-# INLINABLE multiplyTwoLists #-}
 multiplyTwoLists :: [Integer] -> [Integer] -> [Integer]
 multiplyTwoLists a b = combineLists a b []
   where
@@ -110,6 +113,7 @@ multiplyTwoLists a b = combineLists a b []
 --
 -- Testing: Test.Groups.List
 -------------------------------------------------------------------------
+{-# INLINABLE multiplyAList #-}
 multiplyAList :: [Integer] -> Integer -> [Integer]
 multiplyAList a scale'' = combineLists a scale'' []
   where
@@ -126,6 +130,7 @@ multiplyAList a scale'' = combineLists a scale'' []
 --
 -- Testing: Test.Groups.List
 -------------------------------------------------------------------------
+{-# INLINABLE divideTwoLists #-}
 divideTwoLists :: [Integer] -> [Integer] -> [Integer]
 divideTwoLists a b = combineLists a b []
   where
@@ -146,6 +151,7 @@ divideTwoLists a b = combineLists a b []
 --
 -- Testing: Test.Groups.List
 -------------------------------------------------------------------------
+{-# INLINABLE divideAList #-}
 divideAList :: [Integer] -> Integer -> [Integer]
 divideAList a scale'' = combineLists a scale'' []
   where
@@ -163,6 +169,7 @@ divideAList a scale'' = combineLists a scale'' []
 --
 -- Testing: Test.Groups.List
 -------------------------------------------------------------------------
+{-# INLINABLE replicate #-}
 replicate :: [Integer] -> Integer -> [Integer]
 replicate l n' = replicate' n' l []
   where
