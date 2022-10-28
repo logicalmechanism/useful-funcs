@@ -15,6 +15,7 @@ import Test.Tasty.QuickCheck
 --------------------------------------------------------------------------------
 
 import CryptoFuncs ( verifyDiscretLogarithm
+                   , merkleTree
                    )
 import MathFuncs ( pow )                   
 --------------------------------------------------------------------------------
@@ -35,6 +36,12 @@ prop_VerifyDiscretLogarithm = do
   ; all (==(True :: Bool)) [a,b]
   }
 
+prop_MerkleTreeTest = do
+  { let a = True
+  ; all (==(True :: Bool)) [a]
+  }
 
 tests :: [TestTree]
-tests = [ testProperty "Discret Log Test"  prop_VerifyDiscretLogarithm ]
+tests = [ testProperty "Discret Log Test"  prop_VerifyDiscretLogarithm
+        , testProperty "Merkle Tree Test" prop_MerkleTreeTest
+        ]

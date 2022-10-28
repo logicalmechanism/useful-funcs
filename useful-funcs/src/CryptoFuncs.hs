@@ -37,9 +37,12 @@ A collection of tested on and off chain plutus crypto functions.
 -}
 module CryptoFuncs
   ( verifyDiscretLogarithm
+  , merkleTree
   ) where
 import PlutusTx.Prelude
-import MathFuncs        ( powmod )
+import Plutus.V2.Ledger.Api as V2
+import MathFuncs               ( powmod )
+import StringFuncs             ( hash )
 -------------------------------------------------------------------------------
 -- | Given a generator g of prime order q and agreed upon r and c constants,
 -- verify that g^z = g^r * u^c mod q. This should allow a user to select some
@@ -58,3 +61,30 @@ verifyDiscretLogarithm g r c q z u = powmod g z q == productPowMod
         then modulo w q
         else w
       where w = (powmod g r q)*(powmod u c q)
+-------------------------------------------------------------------------------
+-- | Calculate the merkle tree from a list of bytestrings
+-------------------------------------------------------------------------------
+{-# INLINABLE merkleTree #-}
+merkleTree :: [V2.BuiltinByteString] -> V2.BuiltinByteString
+merkleTree listOfStrings =
+  if length
+  if modulo (length listOfStrings) 2 == 0
+    then hash combined
+    else merkleTree (listOfStrings <> [emptyByteString]) -- append the empty bytestring to an odd length list
+  where
+
+    numberOfLeaves :: Integer
+    numberOfLeave = length listOfStrings
+
+    firstBranch :: [V2.BuiltinByteString] -> [V2.BuiltinByteString] -> [V2.BuiltinByteString]
+    firstBranch []     store = store
+    firstBranch (x:xs) store = firstBranch xs (store <> [hash x])
+
+
+
+
+    firstPart = head listOfStrings
+
+    secondPart = head $ tail listOfStrings
+
+    combined = firstPart <> secondPart
