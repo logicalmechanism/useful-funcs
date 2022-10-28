@@ -62,26 +62,31 @@ verifyDiscretLogarithm g r c q z u = powmod g z q == productPowMod
         else w
       where w = (powmod g r q)*(powmod u c q)
 -------------------------------------------------------------------------------
--- | Calculate the merkle tree from a list of bytestrings
+-- | Calculate the merkle tree from a list of bytestrings.
+--
+-- Testing: Test.Groups.Crypto
 -------------------------------------------------------------------------------
 {-# INLINABLE merkleTree #-}
 merkleTree :: [V2.BuiltinByteString] -> V2.BuiltinByteString
 merkleTree listOfStrings =
-  if length
-  if modulo (length listOfStrings) 2 == 0
-    then hash combined
-    else merkleTree (listOfStrings <> [emptyByteString]) -- append the empty bytestring to an odd length list
+  if numberOfLeaves == 0
+    then hash emptyByteString                              -- an empty list hashes the empty bytestring
+    else if modulo (length listOfStrings) 2 == 0
+      then hash emptyByteString                            -- calculate the merkle here
+      else merkleTree (listOfStrings <> [emptyByteString]) -- append the empty bytestring to an odd length list
   where
-
     numberOfLeaves :: Integer
-    numberOfLeave = length listOfStrings
+    numberOfLeaves = length listOfStrings
 
-    firstBranch :: [V2.BuiltinByteString] -> [V2.BuiltinByteString] -> [V2.BuiltinByteString]
-    firstBranch []     store = store
-    firstBranch (x:xs) store = firstBranch xs (store <> [hash x])
+    firstBranch :: [V2.BuiltinByteString]
+    firstBranch = firstBranch' listOfStrings []
+      where
+        firstBranch' :: [V2.BuiltinByteString] -> [V2.BuiltinByteString] -> [V2.BuiltinByteString]
+        firstBranch' []     store = store
+        firstBranch' (x:xs) store = firstBranch' xs (store <> [hash x])
 
-
-
+    computeMerkleTree :: [V2.BuiltinByteString] -> V2.BuiltinByteString
+    computeMerkleTree lStr = hash emptyByteString
 
     firstPart = head listOfStrings
 
