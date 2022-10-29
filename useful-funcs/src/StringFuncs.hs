@@ -27,7 +27,7 @@
 {-# OPTIONS_GHC -fexpose-all-unfoldings       #-}
 {-|
 Module      : StringFuncs
-Description : A Collection of String Functions
+Description : A collection of string functions.
 Copyright   : (c) Ancient Kraken, 2022
 License     : GPL-3
 Maintainer  : logical.mechanism@protonmail.com

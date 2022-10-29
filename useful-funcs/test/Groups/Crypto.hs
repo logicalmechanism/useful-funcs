@@ -39,14 +39,16 @@ prop_VerifyDiscretLogarithm = do
   ; all (==(True :: Bool)) [a,b]
   }
 
+-- test the creation of a merkle tree
 prop_MerkleTreeTest = do
   { let a = hash "" == merkleTree []
-  ; let b = hash ( (hash "") <> (hash ""))   == merkleTree ["", ""]
-  ; let c = hash ( (hash "") <> (hash ""))   == merkleTree [""]
+  ; let b = hash ( (hash "")  <> (hash "") ) == merkleTree ["", ""]
+  ; let c = hash ( (hash "")  <> (hash "") ) == merkleTree [""]
   ; let d = hash ( (hash "a") <> (hash "b")) == merkleTree ["a", "b"]
-  ; let e = hash ( (hash "a") <> (hash ""))  == merkleTree ["a"]
+  ; let e = hash ( (hash "a") <> (hash "") ) == merkleTree ["a"]
   ; let f = (DatumHash $ merkleTree [integerAsByteString f' | f' <- [1..500]]) == "a38aecc7812b0df0552901e76f5440190f26fbb9d0ef4f977e60a100fb6f33e3"
-  ; all (==(True :: Bool)) [a,b,c,d,e,f]
+  ; let g = merkleTree [integerAsByteString f' | f' <- [1..300]] /= merkleTree [integerAsByteString f' | f' <- [1..400]]
+  ; all (==(True :: Bool)) [a,b,c,d,e,f,g]
   }
 
 tests :: [TestTree]

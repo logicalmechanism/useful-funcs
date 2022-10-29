@@ -27,7 +27,7 @@
 {-# OPTIONS_GHC -fexpose-all-unfoldings       #-}
 {-|
 Module      : UsefulFuncs
-Description : A Collection of all the Useful Functions
+Description : A collection of all the useful functions.
 Copyright   : (c) Ancient Kraken, 2022
 License     : GPL-3
 Maintainer  : logical.mechanism@protonmail.com
@@ -69,6 +69,7 @@ module UsefulFuncs
   , ValueFuncs.isNRedeemers
   , ValueFuncs.adaValue
   , CryptoFuncs.verifyDiscretLogarithm
+  , CryptoFuncs.merkleTree
   ) where
 -- useful funcs is just a wrapper around all the sub modules
 import ListFuncs
