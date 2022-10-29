@@ -64,6 +64,8 @@ verifyDiscretLogarithm g r c q z u = powmod g z q == productPowMod
 -------------------------------------------------------------------------------
 -- | Calculate the merkle tree from a list of bytestrings.
 --
+-- WORK IN PROGRESS
+--
 -- Testing: Test.Groups.Crypto
 -------------------------------------------------------------------------------
 {-# INLINABLE merkleTree #-}
