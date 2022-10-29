@@ -27,7 +27,7 @@
 {-# OPTIONS_GHC -fexpose-all-unfoldings       #-}
 {-|
 Module      : AddressFuncs
-Description : A Collection of Address Functions
+Description : A collection of address functions.
 Copyright   : (c) Ancient Kraken, 2022
 License     : GPL-3
 Maintainer  : logical.mechanism@protonmail.com

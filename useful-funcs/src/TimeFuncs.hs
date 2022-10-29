@@ -27,7 +27,7 @@
 {-# OPTIONS_GHC -fexpose-all-unfoldings       #-}
 {-|
 Module      : TimeFuncs
-Description : A Collection of Time Functions
+Description : A collection of time functions.
 Copyright   : (c) Ancient Kraken, 2022
 License     : GPL-3
 Maintainer  : logical.mechanism@protonmail.com

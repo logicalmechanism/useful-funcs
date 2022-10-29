@@ -27,7 +27,7 @@
 {-# OPTIONS_GHC -fexpose-all-unfoldings       #-}
 {-|
 Module      : MathFuncs
-Description : A Collection of Math Functions
+Description : A collection of math functions.
 Copyright   : (c) Ancient Kraken, 2022
 License     : GPL-3
 Maintainer  : logical.mechanism@protonmail.com

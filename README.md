@@ -38,7 +38,7 @@ Then add in `useful-funcs` into your .cabal file as a build dependency.
 
 ```cabal
   ...
-  exposed-modules: Contract
+  exposed-modules: SmartContract
 
   build-depends:   useful-funcs
   ...
@@ -55,6 +55,7 @@ Now the contract has access to all the useful functions inside the repo.
 The module is split into different sub functions in case importing the entire usefulfuncs is too much overhead. The submodules can be imported in a similar fashion. Refer to the documentation for a list of the various submodules that make up useful funcs.
 
 ```hs
+-- if just time and value are required for example.
 import TimeFuncs
 import ValueFuncs
 ```

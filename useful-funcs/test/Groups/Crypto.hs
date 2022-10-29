@@ -6,6 +6,7 @@ module Groups.Crypto (tests) where
 --------------------------------------------------------------------------------
 
 import PlutusTx.Prelude
+import Plutus.V2.Ledger.Api as V2
 
 --------------------------------------------------------------------------------
 
@@ -13,10 +14,13 @@ import Test.Tasty
 import Test.Tasty.QuickCheck
 
 --------------------------------------------------------------------------------
-
 import CryptoFuncs ( verifyDiscretLogarithm
+                   , merkleTree
                    )
-import MathFuncs ( pow )                   
+import MathFuncs   ( pow )
+import StringFuncs ( hash 
+                   , integerAsByteString
+                   )
 --------------------------------------------------------------------------------
 
 -- test if ranges are in or outside or some other range. no crossovers intervals
@@ -35,6 +39,19 @@ prop_VerifyDiscretLogarithm = do
   ; all (==(True :: Bool)) [a,b]
   }
 
+-- test the creation of a merkle tree
+prop_MerkleTreeTest = do
+  { let a = hash "" == merkleTree []
+  ; let b = hash ( (hash "")  <> (hash "") ) == merkleTree ["", ""]
+  ; let c = hash ( (hash "")  <> (hash "") ) == merkleTree [""]
+  ; let d = hash ( (hash "a") <> (hash "b")) == merkleTree ["a", "b"]
+  ; let e = hash ( (hash "a") <> (hash "") ) == merkleTree ["a"]
+  ; let f = (DatumHash $ merkleTree [integerAsByteString f' | f' <- [1..500]]) == "a38aecc7812b0df0552901e76f5440190f26fbb9d0ef4f977e60a100fb6f33e3"
+  ; let g = merkleTree [integerAsByteString f' | f' <- [1..300]] /= merkleTree [integerAsByteString f' | f' <- [1..400]]
+  ; all (==(True :: Bool)) [a,b,c,d,e,f,g]
+  }
 
 tests :: [TestTree]
-tests = [ testProperty "Discret Log Test"  prop_VerifyDiscretLogarithm ]
+tests = [ testProperty "Discret Log Test"  prop_VerifyDiscretLogarithm
+        , testProperty "Merkle Tree Test" prop_MerkleTreeTest
+        ]
