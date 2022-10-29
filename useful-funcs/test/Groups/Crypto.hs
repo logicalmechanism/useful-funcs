@@ -6,6 +6,7 @@ module Groups.Crypto (tests) where
 --------------------------------------------------------------------------------
 
 import PlutusTx.Prelude
+import Plutus.V2.Ledger.Api as V2
 
 --------------------------------------------------------------------------------
 
@@ -17,7 +18,9 @@ import CryptoFuncs ( verifyDiscretLogarithm
                    , merkleTree
                    )
 import MathFuncs   ( pow )
-import StringFuncs ( hash )
+import StringFuncs ( hash 
+                   , integerAsByteString
+                   )
 --------------------------------------------------------------------------------
 
 -- test if ranges are in or outside or some other range. no crossovers intervals
@@ -42,7 +45,8 @@ prop_MerkleTreeTest = do
   ; let c = hash ( (hash "") <> (hash ""))   == merkleTree [""]
   ; let d = hash ( (hash "a") <> (hash "b")) == merkleTree ["a", "b"]
   ; let e = hash ( (hash "a") <> (hash ""))  == merkleTree ["a"]
-  ; all (==(True :: Bool)) [a,b,c,d,e]
+  ; let f = (DatumHash $ merkleTree [integerAsByteString f' | f' <- [1..500]]) == "a38aecc7812b0df0552901e76f5440190f26fbb9d0ef4f977e60a100fb6f33e3"
+  ; all (==(True :: Bool)) [a,b,c,d,e,f]
   }
 
 tests :: [TestTree]

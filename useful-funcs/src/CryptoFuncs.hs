@@ -64,7 +64,11 @@ verifyDiscretLogarithm g r c q z u = powmod g z q == productPowMod
 -------------------------------------------------------------------------------
 -- | Calculate the merkle tree from a list of bytestrings.
 --
--- WORK IN PROGRESS
+-- If the list of strings is empty then the Merkle tree will return the hash of 
+-- the empty bytestring. If the length is odd then the empty bytestring is appended
+-- to the list such that it can be split into pairs. When the list has an even length,
+-- the first step is hashing each element of the original list. Then in a pairwise fashion
+-- the merkle tree is built, ultimately reutnring the hash of the final object.
 --
 -- Testing: Test.Groups.Crypto
 -------------------------------------------------------------------------------
@@ -80,6 +84,7 @@ merkleTree listOfStrings =
     numberOfLeaves :: Integer
     numberOfLeaves = length listOfStrings
 
+    -- hashes all the original bytestrings into a list of hashes.
     firstBranch :: [V2.BuiltinByteString]
     firstBranch = firstBranch' listOfStrings []
       where
@@ -87,12 +92,20 @@ merkleTree listOfStrings =
         firstBranch' []     store = store
         firstBranch' (x:xs) store = firstBranch' xs (store <> [hash x])
 
+    -- recursively compute the tree
     computeMerkleTree :: [V2.BuiltinByteString] -> [V2.BuiltinByteString] -> V2.BuiltinByteString
     computeMerkleTree lStr storage = 
       if length lStr /= 0
         then computeMerkleTree (tail $ tail lStr) (storage <> [hash combined])
-        else head storage
+        else if numberOfBrances == 1
+          then head storage                                          -- the root is returned
+          else if modulo numberOfBrances 2 == 0
+            then computeMerkleTree storage []                        -- continue as normal
+            else computeMerkleTree (storage <> [emptyByteString]) [] -- append empty bytestring to odd length lists
       where
+        numberOfBrances :: Integer
+        numberOfBrances = length storage
+
         firstPart :: V2.BuiltinByteString
         firstPart = head lStr
 
