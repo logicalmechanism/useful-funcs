@@ -74,7 +74,7 @@ merkleTree listOfStrings =
   if numberOfLeaves == 0
     then hash emptyByteString                              -- an empty list hashes the empty bytestring
     else if modulo (length listOfStrings) 2 == 0
-      then hash emptyByteString                            -- calculate the merkle here
+      then computeMerkleTree firstBranch []                -- calculate the merkle here
       else merkleTree (listOfStrings <> [emptyByteString]) -- append the empty bytestring to an odd length list
   where
     numberOfLeaves :: Integer
@@ -87,11 +87,17 @@ merkleTree listOfStrings =
         firstBranch' []     store = store
         firstBranch' (x:xs) store = firstBranch' xs (store <> [hash x])
 
-    computeMerkleTree :: [V2.BuiltinByteString] -> V2.BuiltinByteString
-    computeMerkleTree lStr = hash emptyByteString
+    computeMerkleTree :: [V2.BuiltinByteString] -> [V2.BuiltinByteString] -> V2.BuiltinByteString
+    computeMerkleTree lStr storage = 
+      if length lStr /= 0
+        then computeMerkleTree (tail $ tail lStr) (storage <> [hash combined])
+        else head storage
+      where
+        firstPart :: V2.BuiltinByteString
+        firstPart = head lStr
 
-    firstPart = head listOfStrings
+        secondPart :: V2.BuiltinByteString
+        secondPart = head $ tail lStr
 
-    secondPart = head $ tail listOfStrings
-
-    combined = firstPart <> secondPart
+        combined :: V2.BuiltinByteString
+        combined = firstPart <> secondPart

@@ -13,11 +13,11 @@ import Test.Tasty
 import Test.Tasty.QuickCheck
 
 --------------------------------------------------------------------------------
-
 import CryptoFuncs ( verifyDiscretLogarithm
                    , merkleTree
                    )
-import MathFuncs ( pow )                   
+import MathFuncs   ( pow )
+import StringFuncs ( hash )
 --------------------------------------------------------------------------------
 
 -- test if ranges are in or outside or some other range. no crossovers intervals
@@ -37,8 +37,12 @@ prop_VerifyDiscretLogarithm = do
   }
 
 prop_MerkleTreeTest = do
-  { let a = True
-  ; all (==(True :: Bool)) [a]
+  { let a = hash "" == merkleTree []
+  ; let b = hash ( (hash "") <> (hash ""))   == merkleTree ["", ""]
+  ; let c = hash ( (hash "") <> (hash ""))   == merkleTree [""]
+  ; let d = hash ( (hash "a") <> (hash "b")) == merkleTree ["a", "b"]
+  ; let e = hash ( (hash "a") <> (hash ""))  == merkleTree ["a"]
+  ; all (==(True :: Bool)) [a,b,c,d,e]
   }
 
 tests :: [TestTree]
