@@ -41,6 +41,7 @@ module MathFuncs
   , percentage
   , baseQ
   , logOfXInBaseB
+  , isIntegerInRange
   ) where
 import PlutusTx.Prelude
 -------------------------------------------------------------------------------
@@ -121,3 +122,26 @@ logOfXInBaseB x b = if b <= 0 then 0 else if x == b then 1 else
   if x < b
     then 0
     else 1 + logOfXInBaseB (divide x b) b
+-------------------------------------------------------------------------------
+-- | Check if an integer is inside a specific range determined by some slippage
+-- parameter. The target value must be contained within the range of the lower
+-- end and higher end. It checks if a <= x <= b for some target x and some limits
+-- a and b. 
+--
+-- This function will return a boolean of the statement.
+--
+-- >>> isIntegerInRange 100 40 99
+-- True
+--
+-- Testing: Test.Groups.Math
+-------------------------------------------------------------------------------
+{-# INLINABLE isIntegerInRange #-}
+isIntegerInRange :: Integer -> Integer -> Integer -> Bool
+isIntegerInRange value slippage target = lowEnd <= target  && -- target is equal or greater than the lower end
+                                         target <= highEnd    -- target is equal or less than the higher end
+  where
+    lowEnd :: Integer
+    lowEnd = value - percentage value slippage
+
+    highEnd :: Integer
+    highEnd = value + percentage value slippage

@@ -19,6 +19,7 @@ import MathFuncs ( logOfXInBaseB
                  , pow
                  , powmod
                  , percentage
+                 , isIntegerInRange
                  )
 --------------------------------------------------------------------------------
 
@@ -49,7 +50,7 @@ prop_PowTest = do
   ; all (==(True :: Bool)) [a,b,c,d]
   }
 
--- pow stuff
+-- power mod stuff
 prop_PowModTest = do
   { let a = powmod 10 0 0 == 0
   ; let b = powmod 0  2 0 == 0
@@ -58,12 +59,21 @@ prop_PowModTest = do
   ; all (==(True :: Bool)) [a,b,c,d]
   }
 
--- pow stuff
+-- percentage stuff
 prop_PercentageTest = do
   { let a = percentage 1           0   ==  0
   ; let b = percentage 100000000   40  ==  2500000
   ; let c = percentage 100000000 (-40) == -2500000
   ; let d = percentage 10          100 ==  0
+  ; all (==(True :: Bool)) [a,b,c,d]
+  }
+
+-- integer in range
+prop_IsIntegerInRangeTest = do
+  { let a = isIntegerInRange 100 40 99 == True
+  ; let b = isIntegerInRange 100 40 89 == False
+  ; let c = isIntegerInRange 100 0  89 == False
+  ; let d = isIntegerInRange 0   0  0  == True
   ; all (==(True :: Bool)) [a,b,c,d]
   }
 
@@ -73,4 +83,5 @@ tests = [ testProperty "Log Of x In base b"      prop_LogTest
         , testProperty "x To The Power Of n"     prop_PowTest
         , testProperty "x To The Power Of n % q" prop_PowModTest
         , testProperty "Percentage of some n"    prop_PercentageTest
+        , testProperty "is int in some range"    prop_IsIntegerInRangeTest
         ]
