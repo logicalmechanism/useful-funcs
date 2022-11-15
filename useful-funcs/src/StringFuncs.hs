@@ -169,7 +169,7 @@ byteStringAsIntegerList str' = createList str' 0 []
     createList str counter value' =
       if counter >= length'
         then value'
-        else createList (dropByteString 2 str) (counter+1) (value' <> [convertNumber (takeByteString 2 str) 0 1])
+        else createList (dropByteString 2 str) (counter + 1) (value' <> [convertNumber (takeByteString 2 str) 0 1])
     
     convertNumber :: V2.BuiltinByteString -> Integer -> Integer -> Integer
     convertNumber nList value counter =
