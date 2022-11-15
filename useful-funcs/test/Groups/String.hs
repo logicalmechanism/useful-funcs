@@ -47,8 +47,7 @@ prop_ByteStringManipulationTest = do
 prop_IntegerToStringTest = do
   { let a = integerAsByteString 1234567890 == "1234567890"
   ; let b = integerAsByteString 0          == "0"
-  ; let c = integerAsByteString (-123)     == "-123"
-  ; all (==(True :: Bool)) [a,b,c]
+  ; all (==(True :: Bool)) [a,b]
   }
 
 -- convert a string into a number via product
