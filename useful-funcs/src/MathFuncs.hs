@@ -128,7 +128,7 @@ logOfXInBaseB x b = if b <= 0 then 0 else if x == b then 1 else
 -- end and higher end. It checks if a <= x <= b for some target x and some limits
 -- a and b. 
 --
--- This function will return a boolean of the statement.
+-- This function will return a boolean of the logic statement.
 --
 -- >>> isIntegerInRange 100 40 99
 -- True

@@ -70,11 +70,13 @@ prop_PercentageTest = do
 
 -- integer in range
 prop_IsIntegerInRangeTest = do
-  { let a = isIntegerInRange 100 40 99 == True
-  ; let b = isIntegerInRange 100 40 89 == False
-  ; let c = isIntegerInRange 100 0  89 == False
-  ; let d = isIntegerInRange 0   0  0  == True
-  ; all (==(True :: Bool)) [a,b,c,d]
+  { let a = isIntegerInRange 100 40 99  == True
+  ; let b = isIntegerInRange 100 40 89  == False
+  ; let c = isIntegerInRange 100 0  89  == False
+  ; let d = isIntegerInRange 0   0  0   == True
+  ; let e = isIntegerInRange 100 0  100 == True
+  ; let f = isIntegerInRange 100 1  0   == True
+  ; all (==(True :: Bool)) [a,b,c,d,e,f]
   }
 
 tests :: [TestTree]
