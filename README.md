@@ -12,7 +12,7 @@ To build the project from the parent directory run these cabal commands.
 cd useful-funcs
 cabal clean
 cabal update
-cabal build -w ghc-8.10.7
+cabal build -w ghc-8.10.7 -O2
 ```
 
 To run all the tests from inside the useful-funcs contract folder run `cabal test`.

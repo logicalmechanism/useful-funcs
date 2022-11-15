@@ -52,6 +52,7 @@ import MathFuncs            ( pow, baseQ )
 --
 -- Not Exposed
 -------------------------------------------------------------------------------
+{-# INLINABLE integerToStringMapping #-}
 integerToStringMapping :: Integer -> V2.BuiltinByteString
 integerToStringMapping ch
   | ch == 0   = "0"
@@ -124,6 +125,7 @@ integerToStringMapping ch
 --
 -- Not Exposed
 -------------------------------------------------------------------------------
+{-# INLINABLE stringToIntegerMapping #-}
 stringToIntegerMapping :: V2.BuiltinByteString -> Integer
 stringToIntegerMapping ch
   | ch == "0" = 0
@@ -167,7 +169,7 @@ byteStringAsIntegerList str' = createList str' 0 []
     createList str counter value' =
       if counter >= length'
         then value'
-        else createList (dropByteString 2 str) (counter+1) (value' <> [convertNumber (takeByteString 2 str) 0 1])
+        else createList (dropByteString 2 str) (counter + 1) (value' <> [convertNumber (takeByteString 2 str) 0 1])
     
     convertNumber :: V2.BuiltinByteString -> Integer -> Integer -> Integer
     convertNumber nList value counter =
@@ -196,13 +198,7 @@ integerAsByteString :: Integer -> V2.BuiltinByteString
 integerAsByteString num = 
   if num == 0 
     then "0" 
-    else 
-      if num > 0
-        then convertToString (base10 num) "" 
-        else "-" <> convertToString (base10 (-1*num)) "" -- attach the negative sign
-  where
-    base10 :: Integer -> [Integer]
-    base10 num' = baseQ num' 10
+    else convertToString (baseQ num 10) "" 
 -------------------------------------------------------------------------------
 -- | Converts a list of integers into a string by mapping integers to letters up
 -- to the value of 64. This is unlike createBuiltinByteString which uses ascii codes
@@ -214,7 +210,7 @@ integerAsByteString num =
 -- Testing: Test.Groups.String
 -------------------------------------------------------------------------------
 {-# INLINABLE convertToString #-}
-convertToString :: [Integer] -> BuiltinByteString -> BuiltinByteString
+convertToString :: [Integer] -> V2.BuiltinByteString -> V2.BuiltinByteString
 convertToString []     str = str
 convertToString (x:xs) str = convertToString xs (str <> integerToStringMapping x)
 -------------------------------------------------------------------------------
@@ -257,7 +253,7 @@ createBuiltinByteString intList = flattenBuiltinByteString [ consByteString x em
 -- Testing: Test.Groups.String
 -------------------------------------------------------------------------
 {-# INLINABLE convertByteStringToInteger #-}
-convertByteStringToInteger :: BuiltinByteString -> Integer
+convertByteStringToInteger :: V2.BuiltinByteString -> Integer
 convertByteStringToInteger hexString = 
   if hexString == emptyByteString
     then 0
@@ -271,7 +267,7 @@ convertByteStringToInteger hexString =
     fixedLength = 6
 
     -- add 1 to each number to avoid multiplying by zero
-    hexStringToInteger :: BuiltinByteString -> Integer -> Integer -> Integer
+    hexStringToInteger :: V2.BuiltinByteString -> Integer -> Integer -> Integer
     hexStringToInteger hex_string counter value'
       | counter > 0 = hexStringToInteger hex_string (counter - 1) (value' * (indexByteString hex_string counter + 1))
       | otherwise = value' * (indexByteString hex_string 0 + 1)
