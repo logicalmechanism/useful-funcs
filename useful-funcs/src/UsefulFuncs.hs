@@ -58,6 +58,7 @@ module UsefulFuncs
   , MathFuncs.logOfXInBaseB
   , MathFuncs.baseQ
   , MathFuncs.percentage
+  , MathFuncs.isIntegerInRange
   , ListFuncs.replicate
   , ListFuncs.addTwoLists
   , ListFuncs.subTwoLists

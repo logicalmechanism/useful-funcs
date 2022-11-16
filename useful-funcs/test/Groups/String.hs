@@ -45,9 +45,9 @@ prop_ByteStringManipulationTest = do
 
 -- integer to string
 prop_IntegerToStringTest = do
-  { let a = integerAsByteString 1234567890 == "1234567890"
-  ; let b = integerAsByteString 0          == "0"
-  ; let c = integerAsByteString (-123)     == "-123"
+  { let a = integerAsByteString 1234567890       == "1234567890"
+  ; let b = integerAsByteString 0                == "0"
+  ; let c = "Testing_" <> integerAsByteString 42 == "Testing_42"
   ; all (==(True :: Bool)) [a,b,c]
   }
 
