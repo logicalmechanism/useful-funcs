@@ -2,6 +2,5 @@ cradle:
   cabal:
     - path: "./useful-funcs/src"
       component: "lib:useful-funcs"
-
     - path: "./useful-funcs/test/Groups"
       component: "useful-funcs:test:useful-func-test"
