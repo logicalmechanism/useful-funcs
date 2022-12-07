@@ -38,6 +38,7 @@ A collection of tested on and off chain plutus graph functions
 module GraphFuncs
   ( colorGraph
   , createGraph
+  , morphAGraph
   , computeGraphMTree
   , computeIsomorphism
   ) where
@@ -109,10 +110,19 @@ computeIsomorphism stringInput = if lengthOfByteString stringInput /= 64 then []
           | x `elem` ys = checkIfContainsAll xs ys
           | otherwise = checkIfContainsAll xs (x:ys)
 -------------------------------------------------------------------------------
+-- | Morph the graph
+-------------------------------------------------------------------------------
+morphAGraph :: [(Integer, [Integer])] -> [Integer] -> [(Integer, [Integer])]
+morphAGraph graph isomorphism = morphAGraph' graph [] isomorphism
+  where
+    morphAGraph' :: [(Integer, [Integer])] -> [(Integer, [Integer])] -> [Integer] -> [(Integer, [Integer])]
+    morphAGraph' []              newGraph []              = newGraph
+    morphAGraph' ((_, edges):xs) newGraph (newNode:ys) = morphAGraph' xs ((newNode, edges):newGraph) ys
+-------------------------------------------------------------------------------
 -- | Computes the merkle tree of a unique graph coloring
 -------------------------------------------------------------------------------
 computeGraphMTree :: [(Integer, Integer)] -> V2.BuiltinByteString
 computeGraphMTree coloring = merkleTree usedColorStrings
   where
     usedColorStrings :: [V2.BuiltinByteString]
-    usedColorStrings = [integerAsByteString c | (_, c) <- coloring]
+    usedColorStrings = [integerAsByteString g <> integerAsByteString c | (g, c) <- coloring]
