@@ -116,8 +116,12 @@ morphAGraph :: [(Integer, [Integer])] -> [Integer] -> [(Integer, [Integer])]
 morphAGraph graph isomorphism = morphAGraph' graph [] isomorphism
   where
     morphAGraph' :: [(Integer, [Integer])] -> [(Integer, [Integer])] -> [Integer] -> [(Integer, [Integer])]
-    morphAGraph' []              newGraph []              = newGraph
-    morphAGraph' ((_, edges):xs) newGraph (newNode:ys) = morphAGraph' xs ((newNode, edges):newGraph) ys
+    morphAGraph' []                    newGraph _            = reverse newGraph
+    morphAGraph' ((oldNode, edges):xs) newGraph isomorphism' = morphAGraph' xs ((isomorphism' !! oldNode, morphEdges edges [] isomorphism'):newGraph) isomorphism'
+
+    morphEdges :: [Integer] -> [Integer] -> [Integer] -> [Integer]
+    morphEdges []     holder _            = reverse holder
+    morphEdges (x:xs) holder isomorphism' = morphEdges xs ((isomorphism' !! x):holder) isomorphism'
 -------------------------------------------------------------------------------
 -- | Computes the merkle tree of a unique graph coloring
 -------------------------------------------------------------------------------
